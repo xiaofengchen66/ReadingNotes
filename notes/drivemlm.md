@@ -56,19 +56,64 @@ LLM 每一帧只需要在这两个小集合里各选一个 token(词元/标记�
 
 **有仓库,但目前是空壳。** https://github.com/OpenGVLab/DriveMLM 上只有 README、图片素材和 Apache 2.0 license,仓库自己的 TODO 列表写着"Release dataset and annotations"和"Release code and models"**均未完成**。目前无法拉下来训练或复现,只能作为架构参考。论文正文也写"数据集可向通讯作者合理索取",不是公开自动分发。
 
+### 7. 关键原文摘录(中英对照)
+
+**① 全文的论点陈述,一句话找到贡献(Abstract)**
+> "we bridge the gap between the language decisions and the vehicle control commands by standardizing the decision states according to the off-the-shelf motion planning module."
+
+中译:我们通过依照现成的运动规划模块来标准化决策状态,弥合了语言决策与车辆控制指令之间的鸿沟。
+解读:"standardizing the decision states"(标准化决策状态)就是"行为规划状态对齐"这个核心设计的官方说法。精读一篇论文,第一步就是要能从摘要里精确挑出这一句"方法论核心句",而不是记住摘要的整体印象。
+
+**② thesis statement(Section 1 结尾)**
+> "This motivates us to align the LLM with the decision state of the behavioral planning module, and further design an LLM-based close-loop AD system that can run on real-world environments or realistic simulators by using the aligned LLM for behavioral planning."
+
+中译:这促使我们将 LLM 与行为规划模块的决策状态对齐,并进一步设计一个基于 LLM 的闭环自动驾驶系统,用这个对齐后的 LLM 做行为规划,使其能在真实环境或仿真器中运行。
+解读:这是整篇论文的 thesis statement(论点陈述)——上面①是摘要里的浓缩版,这里是引言里的展开版,两句话互相印证,说明这确实是作者反复强调的核心,不是我过度解读。
+
+**③ 决策空间的精确定义(Section 3.2)**
+> "the speed decision states contain [KEEP, ACCELERATE, DECELERATE, STOP], while the path decision states include [FOLLOW, LEFT CHANGE, RIGHT CHANGE, LEFT BORROW, RIGHT BORROW]."
+
+中译:速度决策状态包含 [KEEP, ACCELERATE, DECELERATE, STOP],路径决策状态包含 [FOLLOW, LEFT CHANGE, RIGHT CHANGE, LEFT BORROW, RIGHT BORROW]。
+解读:精读时不能满足于"离散决策空间"这种概括,必须精确到这 9 个具体 token——因为"这个词表多大、多细"直接决定了这个方法的表达力上限,是评价这篇论文设计取舍的关键数字。
+
+**④ 消融实验里的"反差句"(Section 4.5 讨论,对应 Table 5)**
+> "Point clouds do not show the ability to enhance performance."
+
+中译:点云并未表现出提升性能的能力。
+解读:这句话和摘要/方法部分强调"多模态融合"(图像+LiDAR)的正面叙事形成明显反差——论文投入了整整一段(3.3 节)去设计 image-mediated CLIP+SST 的 LiDAR 对齐方案,最后消融实验却说这个模态"没用"。精读时,这种"方法部分很得意、消融部分很诚实"的反差句,往往比任何一句正面结论都更值得划线——它暴露了论文自己也没解决的问题。
+
+**⑤ 闭环结果的因果解释(Section 4.4)**
+> "DriveMLM surpasses all other methods on Driving Score by a large margin. This suggests that DriveMLM is better for handling state-transitions to safely drive through hard cases."
+
+中译:DriveMLM 在 Driving Score 上大幅超越所有其他方法,这说明 DriveMLM 更擅长处理状态转移、安全通过高难度场景。
+对应数字:Table 4,DriveMLM 的 Driving Score 是 76.1,对比 Apollo 71.4、ThinkTwice 70.9、Interfuser 68.3——第一句"大幅超越"有数字支撑,但第二句"更擅长处理 hard cases"是作者的推断(inference),论文并没有专门做"仅在 hard case 子集上"的对比实验来直接验证这个归因,精读时要把"数据能直接证明的"和"作者合理但未直接验证的推断"分开看。
+
 ---
 
 ## English at-a-glance summary
 
 ![DriveMLM summary poster](img/drivemlm_summary.svg)
 
-| Aspect | Summary |
+### 图解读 Diagram walkthrough
+
+海报中间 "CORE IDEA — ARCHITECTURE" 那张图对应论文 Figure 3(DriveMLM framework),按数据流顺序读:
+
+1. 左边四个蓝色小框是四路输入,**同时**喂入,不是顺序处理:多视角视频 I、LiDAR 点云 L、系统消息 M(任务定义 + 交通规则 + 决策词表定义)、用户指令 U(比如"我赶时间,能超车吗")。
+2. 全部汇入橙色的 **Multi-modal Tokenizer**——这是整个架构里工程量最大的部分:视频走 Temporal QFormer 做时序融合;LiDAR 走"image-mediated CLIP + SST"(前面④的反差句提醒我们:这部分虽然设计精巧,消融实验却证明它对最终效果几乎没贡献);系统消息和用户指令直接走普通文本 token 化。
+3. 所有模态的 token 一起送进橙色的 **MLLM Decoder (LLaMA-7B)**,用标准的 next-token 交叉熵训练——没有什么特殊的多模态融合损失函数,融合的工作全部由第 2 步的 tokenizer 完成。
+4. Decoder 的输出分叉成两个紫色框:**Decision State S**(speed token × path token,真正参与控制的核心产物)和 **Explanation E**(自然语言解释,只用于可解释性和人机交互,不参与闭环控制回路)。
+5. 只有 Decision State S 会继续往右送进绿色的 **Existing Motion Planner**(Apollo/AutoPilot,这部分代码完全不改动);图上橙色小字 "plug-and-play, no translation layer" 强调的正是这一步——S 不需要任何额外解析,直接就是 Apollo 认识的输入格式。
+6. 最终由这个未经改动的传统规划器闭环控制车辆。这也是全文的核心论点在架构图里的体现:创新点不在"造一个新的规划器",而在"让 LLM 的输出长得和现成规划器的输入一模一样"。
+
+### English at-a-glance table(中英对照)
+
+| Aspect 方面 | Summary |
 |---|---|
-| **Problem** | Prior LLM-for-driving work (DriveGPT4, LanguageMPC, GPT-Driver, etc.) only produces free-form language decisions that cannot be converted into vehicle control signals — none of them run true closed-loop driving in a simulator. |
-| **Novelty** | *Behavioral Planning States Alignment*: instead of free text or continuous waypoints, the LLM's decision space is narrowed to a small fixed vocabulary — speed `{KEEP, ACCELERATE, DECELERATE, STOP}` and path `{FOLLOW, LEFT_CHANGE, RIGHT_CHANGE, LEFT_BORROW, RIGHT_BORROW}` — that plugs directly into an existing modular AD system's (Apollo/AutoPilot) motion-planning input, with zero extra translation layer. |
-| **Core idea** | MLLM planner = multi-modal tokenizer (temporal QFormer for multi-view video; image-mediated CLIP alignment for LiDAR, since no point-cloud/text pairs exist) + MLLM decoder trained with next-token cross-entropy to emit a decision-state token + explanation. |
-| **Data engine trick** | 280h of CARLA driving across 30 hand-designed safety-critical scenarios; decision states auto-labeled from expert trajectories via hand-crafted rules (no frame-by-frame human annotation); explanations auto-generated from scene elements, then diversified with GPT-3.5 + light human refinement. |
-| **Hardest part** | (1) Making the language output actually *executable* in a real closed-loop simulator (CARLA Town05 Long, Driving Score/Route Completion/Infraction Score/MPI) rather than just scoring well on language-similarity metrics. (2) The LiDAR fusion pipeline (image-mediated CLIP + SST encoder) is elaborate but the ablation shows point clouds barely help (74.99% vs 75.23% accuracy) — a caution against assuming a modality-fusion design pays off just because it "should." |
-| **Evidence** | DS 76.1 / MPI 0.96 on CARLA Town05 Long, beating Apollo (71.4/0.76) and end-to-end SOTA (ThinkTwice, Interfuser). Also shows zero-shot generalization on real nuScenes frames and responds sensibly to natural-language user instructions (yields for emergency vehicles, refuses unsafe overtakes). |
-| **Relation to DriveVLM** | Complementary halves of the same "VLM/LLM → driving" gap: DriveVLM optimizes scene *understanding* (rich CoT, continuous waypoints, its own SUP-AD benchmark); DriveMLM optimizes decision *executability* (discrete state tokens wired directly into an existing modular pipeline, evaluated closed-loop in CARLA). |
-| **Code / GitHub** | Repo exists (**github.com/OpenGVLab/DriveMLM**) but is currently a placeholder — README + license only; the repo's own TODO list ("Release dataset and annotations", "Release code and models") is **still unchecked**. Not reproducible yet. |
+| **Problem 问题** | Prior LLM-for-driving work (DriveGPT4, LanguageMPC, GPT-Driver, etc.) only produces free-form language decisions that cannot be converted into vehicle control signals — none of them run true closed-loop driving in a simulator.<br>此前的 LLM 驾驶工作(DriveGPT4、LanguageMPC、GPT-Driver 等)只能生成自由格式的语言决策,无法转换成车辆控制信号——没有一个真正在闭环仿真器里跑起来过。 |
+| **Novelty 新意** | *Behavioral Planning States Alignment*: instead of free text or continuous waypoints, the LLM's decision space is narrowed to a small fixed vocabulary — speed `{KEEP, ACCELERATE, DECELERATE, STOP}` and path `{FOLLOW, LEFT_CHANGE, RIGHT_CHANGE, LEFT_BORROW, RIGHT_BORROW}` — that plugs directly into an existing modular AD system's (Apollo/AutoPilot) motion-planning input, with zero extra translation layer.<br>*行为规划状态对齐*:不用自由文本或连续轨迹点,而是把 LLM 的决策空间收窄成一个固定小词表——速度 `{KEEP, ACCELERATE, DECELERATE, STOP}` 和路径 `{FOLLOW, LEFT_CHANGE, RIGHT_CHANGE, LEFT_BORROW, RIGHT_BORROW}`——直接插入现有模块化系统(Apollo/AutoPilot)的运动规划输入,零额外转换层。 |
+| **Core idea 核心想法** | MLLM planner = multi-modal tokenizer (temporal QFormer for multi-view video; image-mediated CLIP alignment for LiDAR, since no point-cloud/text pairs exist) + MLLM decoder trained with next-token cross-entropy to emit a decision-state token + explanation.<br>MLLM planner = 多模态分词器(视频用 Temporal QFormer;LiDAR 借图像做中介做 CLIP 对齐,因为没有点云-文本配对数据)+ 用 next-token 交叉熵训练的 MLLM 解码器,输出决策状态 token + 解释。 |
+| **Data engine trick 数据引擎技巧** | 280h of CARLA driving across 30 hand-designed safety-critical scenarios; decision states auto-labeled from expert trajectories via hand-crafted rules (no frame-by-frame human annotation); explanations auto-generated from scene elements, then diversified with GPT-3.5 + light human refinement.<br>280 小时 CARLA 驾驶数据,覆盖 30 类人工设计的高危场景;决策状态用硬编码规则从专家轨迹自动反推标注(无需逐帧人工标注);解释文本先按场景要素自动生成,再用 GPT-3.5 + 少量人工润色扩充多样性。 |
+| **Hardest part 最大难点** | (1) Making the language output actually *executable* in a real closed-loop simulator (CARLA Town05 Long, Driving Score/Route Completion/Infraction Score/MPI) rather than just scoring well on language-similarity metrics. (2) The LiDAR fusion pipeline (image-mediated CLIP + SST encoder) is elaborate but the ablation shows point clouds barely help (74.99% vs 75.23% accuracy) — a caution against assuming a modality-fusion design pays off just because it "should."<br>(1) 让语言输出在真正的闭环仿真器(CARLA Town05 Long,用 Driving Score/路线完成率/违规扣分/MPI 评测)里可执行,而不只是语言相似度打分好看。(2) LiDAR 融合流程(image-mediated CLIP + SST 编码器)设计精巧,但消融显示点云几乎没帮助(74.99% vs 不加点云的 75.23%)——提醒我们不能想当然地认为"看起来该有用的模态融合"就一定有用。 |
+| **Evidence 证据** | DS 76.1 / MPI 0.96 on CARLA Town05 Long, beating Apollo (71.4/0.76) and end-to-end SOTA (ThinkTwice, Interfuser). Also shows zero-shot generalization on real nuScenes frames and responds sensibly to natural-language user instructions (yields for emergency vehicles, refuses unsafe overtakes).<br>在 CARLA Town05 Long 上 DS 76.1 / MPI 0.96,超过 Apollo(71.4/0.76)和端到端 SOTA(ThinkTwice、Interfuser)。在真实 nuScenes 画面上展现零样本泛化能力,也能合理响应自然语言用户指令(为救护车让道、拒绝不安全的超车请求)。 |
+| **Relation to DriveVLM 与 DriveVLM 的关系** | Complementary halves of the same "VLM/LLM → driving" gap: DriveVLM optimizes scene *understanding* (rich CoT, continuous waypoints, its own SUP-AD benchmark); DriveMLM optimizes decision *executability* (discrete state tokens wired directly into an existing modular pipeline, evaluated closed-loop in CARLA).<br>是同一道"VLM/LLM → 驾驶"鸿沟的互补两半:DriveVLM 优化场景*理解*(丰富的思维链、连续轨迹点、自建 SUP-AD 基准);DriveMLM 优化决策*可执行性*(离散状态 token 直接接入现有模块化系统,在 CARLA 里闭环评测)。 |
+| **Code / GitHub 代码开源情况** | Repo exists (**github.com/OpenGVLab/DriveMLM**) but is currently a placeholder — README + license only; the repo's own TODO list ("Release dataset and annotations", "Release code and models") is **still unchecked**. Not reproducible yet.<br>仓库存在(**github.com/OpenGVLab/DriveMLM**)但目前只是空壳——只有 README 和 license;仓库自己的 TODO("发布数据集和标注"、"发布代码和模型")**都还没勾选**。目前无法复现。 |
