@@ -1,0 +1,145 @@
+<svg width="1440" height="1420" viewBox="0 0 1440 1420" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 40px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 19px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 11.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 12.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1420"/>
+
+  <!-- Header -->
+  <text x="60" y="66" class="title">DriveMLM</text>
+  <text x="60" y="96" class="subtitle">Aligning Multi-Modal LLMs with Behavioral Planning States · Tech report 2023(v3 2025) · Shanghai AI Lab / SenseTime / Tsinghua</text>
+  <text x="60" y="122" class="subtitle">arXiv:2312.09245</text>
+  <rect x="1050" y="48" width="330" height="36" rx="18" fill="#FCEFD8" stroke="#D89B3C"/>
+  <text x="1215" y="71" text-anchor="middle" class="badge" fill="#95661C">CODE: REPO EXISTS, PLACEHOLDER ONLY</text>
+  <line x1="60" y1="145" x2="1380" y2="145" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="170" width="640" height="310" rx="14"/>
+  <text x="88" y="212" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="248" class="body">– Prior LLM-driving work is stuck open-loop:</text>
+  <text x="100" y="270" class="body">language decisions ≠ vehicle control signals.</text>
+  <text x="88" y="304" class="body">– DriveGPT4, LanguageMPC, GPT-Driver etc.</text>
+  <text x="100" y="326" class="body">never ran true closed-loop driving in a</text>
+  <text x="100" y="348" class="body">realistic simulator.</text>
+  <text x="88" y="382" class="body">– Missing piece: a bridge from linguistic</text>
+  <text x="100" y="404" class="body">output to an actually executable</text>
+  <text x="100" y="426" class="body">planning interface.</text>
+
+  <rect class="card" x="740" y="170" width="640" height="310" rx="14"/>
+  <text x="768" y="212" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="248" class="body">– Behavioral Planning State Alignment: LLM</text>
+  <text x="780" y="270" class="body">output is narrowed to Apollo's own discrete</text>
+  <text x="780" y="292" class="body">decision vocabulary, not free text.</text>
+  <text x="768" y="326" class="body">– Speed {KEEP, ACCELERATE, DECELERATE,</text>
+  <text x="780" y="348" class="body">STOP} × Path {FOLLOW, LEFT/RIGHT_CHANGE,</text>
+  <text x="780" y="370" class="body">LEFT/RIGHT_BORROW}.</text>
+  <text x="768" y="404" class="body">– Plugs directly into an existing modular AD</text>
+  <text x="780" y="426" class="body">stack (Apollo/AutoPilot) — zero extra</text>
+  <text x="780" y="448" class="body">translation layer needed.</text>
+
+  <!-- Row 2: ARCHITECTURE -->
+  <rect class="card" x="60" y="510" width="1320" height="400" rx="14"/>
+  <text x="88" y="552" class="section-head" fill="#EE854A">CORE IDEA — ARCHITECTURE</text>
+
+  <!-- input stack -->
+  <rect class="diagbox" x="88" y="620" width="170" height="40" stroke="#4878D0"/>
+  <text x="173" y="645" class="diagtext" font-size="12.5">Multi-view video I</text>
+  <rect class="diagbox" x="88" y="668" width="170" height="40" stroke="#4878D0"/>
+  <text x="173" y="693" class="diagtext" font-size="12.5">LiDAR point cloud L</text>
+  <rect class="diagbox" x="88" y="716" width="170" height="40" stroke="#4878D0"/>
+  <text x="173" y="741" class="diagtext" font-size="12.5">System message M</text>
+  <rect class="diagbox" x="88" y="764" width="170" height="40" stroke="#4878D0"/>
+  <text x="173" y="789" class="diagtext" font-size="12.5">User instruction U</text>
+
+  <!-- tokenizer -->
+  <rect class="diagbox" x="308" y="668" width="204" height="104" stroke="#EE854A"/>
+  <text x="410" y="700" class="diagtext">Multi-modal</text>
+  <text x="410" y="718" class="diagtext">Tokenizer</text>
+  <text x="410" y="738" class="diagsub">Temporal QFormer (video)</text>
+  <text x="410" y="754" class="diagsub">image-mediated CLIP+SST (LiDAR)</text>
+
+  <line x1="258" y1="640" x2="308" y2="700" stroke="#4878D0" stroke-width="1.8" marker-end="url(#arrow2)"/>
+  <line x1="258" y1="688" x2="308" y2="710" stroke="#4878D0" stroke-width="1.8" marker-end="url(#arrow2)"/>
+  <line x1="258" y1="736" x2="308" y2="730" stroke="#4878D0" stroke-width="1.8" marker-end="url(#arrow2)"/>
+  <line x1="258" y1="784" x2="308" y2="750" stroke="#4878D0" stroke-width="1.8" marker-end="url(#arrow2)"/>
+
+  <!-- decoder -->
+  <rect class="diagbox" x="552" y="668" width="216" height="104" stroke="#EE854A"/>
+  <text x="660" y="712" class="diagtext">MLLM Decoder</text>
+  <text x="660" y="732" class="diagtext">(LLaMA-7B)</text>
+  <text x="660" y="754" class="diagsub">next-token cross-entropy</text>
+  <line x1="512" y1="720" x2="552" y2="720" stroke="#EE854A" stroke-width="2.5" marker-end="url(#arrow2)"/>
+
+  <!-- outputs S & E -->
+  <rect class="diagbox" x="812" y="620" width="200" height="90" stroke="#956CB4"/>
+  <text x="912" y="656" class="diagtext">Decision State S</text>
+  <text x="912" y="676" class="diagsub">speed token × path token</text>
+  <text x="912" y="694" class="diagsub">(fixed small vocabulary)</text>
+
+  <rect class="diagbox" x="812" y="730" width="200" height="90" stroke="#956CB4"/>
+  <text x="912" y="768" class="diagtext">Explanation E</text>
+  <text x="912" y="788" class="diagsub">natural-language reason</text>
+
+  <line x1="768" y1="700" x2="812" y2="665" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow2)"/>
+  <line x1="768" y1="740" x2="812" y2="775" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <!-- planner -->
+  <rect class="diagbox" x="1052" y="668" width="268" height="104" stroke="#6ACC64"/>
+  <text x="1186" y="698" class="diagtext">Existing Motion Planner</text>
+  <text x="1186" y="718" class="diagsub">Apollo / AutoPilot (unchanged)</text>
+  <text x="1186" y="736" class="diagsub">→ closed-loop vehicle control</text>
+  <text x="1186" y="752" class="diagsub">(CARLA Town05 Long)</text>
+
+  <line x1="1012" y1="660" x2="1052" y2="700" stroke="#6ACC64" stroke-width="2.2" marker-end="url(#arrow2)"/>
+  <text x="1032" y="640" class="arrowlabel" fill="#4C8C5B">plug-and-play,</text>
+  <text x="1032" y="655" class="arrowlabel" fill="#4C8C5B">no translation layer</text>
+
+  <text x="88" y="880" class="body" fill="#6B7280">Decision state S is Apollo's own vocabulary — the LLM is trained to converge onto it, so downstream code needs zero changes.</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="930" width="640" height="330" rx="14"/>
+  <text x="88" y="972" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1008" class="body">– Making the language output truly executable</text>
+  <text x="100" y="1030" class="body">in a real closed-loop simulator, not just</text>
+  <text x="100" y="1052" class="body">scoring well on language-similarity metrics.</text>
+  <text x="88" y="1086" class="body">– CARLA Town05 Long: Driving Score, Route</text>
+  <text x="100" y="1108" class="body">Completion, Infraction Score, Miles Per</text>
+  <text x="100" y="1130" class="body">Intervention — all require actually driving.</text>
+  <text x="88" y="1164" class="body">– LiDAR fusion (image-mediated CLIP + SST)</text>
+  <text x="100" y="1186" class="body">is elaborate, but ablation shows it barely</text>
+  <text x="100" y="1208" class="body">helps (74.99% vs 75.23% acc w/o LiDAR).</text>
+
+  <rect class="card" x="740" y="930" width="640" height="330" rx="14"/>
+  <text x="768" y="972" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1008" class="body">– DS 76.1, MPI 0.96 on CARLA Town05 Long,</text>
+  <text x="780" y="1030" class="body">beating Apollo (71.4 / 0.76) and end-to-end</text>
+  <text x="780" y="1052" class="body">SOTA (ThinkTwice, Interfuser).</text>
+  <text x="768" y="1086" class="body">– Zero-shot generalizes to real nuScenes</text>
+  <text x="780" y="1108" class="body">frames (0.395 decision accuracy on an</text>
+  <text x="780" y="1130" class="body">unseen real-world domain).</text>
+  <text x="768" y="1164" class="body">– Follows/refuses natural-language user</text>
+  <text x="780" y="1186" class="body">instructions sensibly: yields for emergency</text>
+  <text x="780" y="1208" class="body">vehicles, rejects unsafe overtakes.</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1284" width="1320" height="96" rx="14" fill="#FCEFD8" stroke="#D89B3C"/>
+  <text x="88" y="1316" class="section-head" fill="#95661C">CODE / GITHUB</text>
+  <text x="88" y="1344" class="body">github.com/OpenGVLab/DriveMLM exists but is currently a placeholder (README + license only). The repo's own</text>
+  <text x="88" y="1366" class="body">TODO — "Release dataset and annotations", "Release code and models" — is still unchecked. Not reproducible yet.</text>
+</svg>

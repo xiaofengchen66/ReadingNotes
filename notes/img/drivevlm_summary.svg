@@ -1,0 +1,143 @@
+<svg width="1440" height="1420" viewBox="0 0 1440 1420" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 40px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 19px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 12.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 12.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1420"/>
+
+  <!-- Header -->
+  <text x="60" y="66" class="title">DriveVLM</text>
+  <text x="60" y="96" class="subtitle">The Convergence of Autonomous Driving and Large Vision-Language Models · CoRL 2024 · Tsinghua IIIS + Li Auto</text>
+  <text x="60" y="122" class="subtitle">arXiv:2402.12289</text>
+  <rect x="1150" y="48" width="230" height="36" rx="18" fill="#FBE3E3" stroke="#D65F5F"/>
+  <text x="1265" y="71" text-anchor="middle" class="badge" fill="#B23A3A">CODE: NOT RELEASED</text>
+  <line x1="60" y1="145" x2="1380" y2="145" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="170" width="640" height="310" rx="14"/>
+  <text x="88" y="212" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="248" class="body">– Modular AD pipelines (perception →</text>
+  <text x="100" y="270" class="body">prediction → planning) fail on long-tail scenes.</text>
+  <text x="88" y="304" class="body">– Fallen trees, police hand signals, animals</text>
+  <text x="100" y="326" class="body">crossing the road: unseen, or seen but</text>
+  <text x="100" y="348" class="body">not understood.</text>
+  <text x="88" y="382" class="body">– Traditional modules detect objects and</text>
+  <text x="100" y="404" class="body">predict trajectories, but don't reason</text>
+  <text x="100" y="426" class="body">about what things mean for driving.</text>
+
+  <rect class="card" x="740" y="170" width="640" height="310" rx="14"/>
+  <text x="768" y="212" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="248" class="body">– Not "using a VLM" — the contribution is</text>
+  <text x="780" y="270" class="body">structuring its output into an interpretable</text>
+  <text x="780" y="292" class="body">3-stage Chain-of-Thought.</text>
+  <text x="768" y="326" class="body">– Scene Description → Scene Analysis →</text>
+  <text x="780" y="348" class="body">Hierarchical Planning: each stage is</text>
+  <text x="780" y="370" class="body">human-readable, not a black box.</text>
+  <text x="768" y="404" class="body">– DriveVLM-Dual: slow VLM (System 2,</text>
+  <text x="780" y="426" class="body">reasoning) + fast traditional planner</text>
+  <text x="780" y="448" class="body">(System 1, real-time) — makes onboard</text>
+  <text x="780" y="470" class="body">deployment possible (~410ms on OrinX).</text>
+
+  <!-- Row 2: ARCHITECTURE -->
+  <rect class="card" x="60" y="510" width="1320" height="400" rx="14"/>
+  <text x="88" y="552" class="section-head" fill="#EE854A">CORE IDEA — ARCHITECTURE</text>
+
+  <!-- top row boxes -->
+  <g>
+    <rect class="diagbox" x="88"  y="590" width="222" height="86" stroke="#4878D0"/>
+    <text x="199" y="628" class="diagtext">Multi-view</text>
+    <text x="199" y="648" class="diagtext">camera video</text>
+
+    <rect class="diagbox" x="334" y="590" width="222" height="86" stroke="#4878D0"/>
+    <text x="445" y="622" class="diagtext">VLM backbone</text>
+    <text x="445" y="642" class="diagtext">(Qwen-VL, 9.6B)</text>
+    <text x="445" y="662" class="diagsub">ViT + LLM + projector</text>
+
+    <rect class="diagbox" x="580" y="590" width="222" height="86" stroke="#EE854A"/>
+    <text x="691" y="622" class="diagtext">Scene</text>
+    <text x="691" y="642" class="diagtext">Description</text>
+    <text x="691" y="662" class="diagsub">weather / road / lane</text>
+
+    <rect class="diagbox" x="826" y="590" width="222" height="86" stroke="#EE854A"/>
+    <text x="937" y="622" class="diagtext">Scene</text>
+    <text x="937" y="642" class="diagtext">Analysis</text>
+    <text x="937" y="662" class="diagsub">critical objects + influence</text>
+
+    <rect class="diagbox" x="1072" y="590" width="248" height="86" stroke="#EE854A"/>
+    <text x="1196" y="618" class="diagtext">Hierarchical Planning</text>
+    <text x="1196" y="638" class="diagsub">meta-action → decision →</text>
+    <text x="1196" y="656" class="diagsub">waypoints (W_slow)</text>
+  </g>
+
+  <!-- arrows top row -->
+  <line x1="310" y1="633" x2="330" y2="633" stroke="#EE854A" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="556" y1="633" x2="576" y2="633" stroke="#EE854A" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="802" y1="633" x2="822" y2="633" stroke="#EE854A" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="1048" y1="633" x2="1068" y2="633" stroke="#EE854A" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- vertical arrow down to dual system -->
+  <line x1="1196" y1="676" x2="1196" y2="730" stroke="#6ACC64" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="1256" y="708" class="arrowlabel" fill="#4C8C5B">low-freq reference</text>
+
+  <!-- bottom row boxes: dual system -->
+  <rect class="diagbox" x="826" y="750" width="246" height="86" stroke="#6ACC64"/>
+  <text x="949" y="782" class="diagtext">Traditional Planner</text>
+  <text x="949" y="802" class="diagsub">3D detector + motion planner</text>
+  <text x="949" y="820" class="diagsub">(System 1, fast)</text>
+
+  <line x1="826" y1="793" x2="1072" y2="793" stroke="#6ACC64" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect class="diagbox" x="1072" y="750" width="248" height="86" stroke="#6ACC64"/>
+  <text x="1196" y="782" class="diagtext">Final Trajectory</text>
+  <text x="1196" y="802" class="diagsub">W_fast — real-time control</text>
+
+  <text x="948" y="856" class="arrowlabel" fill="#4C8C5B">high-freq refinement</text>
+  <text x="88" y="892" class="body" fill="#6B7280">DriveVLM-Dual = slow reasoning branch (orange, top) feeding a fast execution branch (green, bottom).</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="930" width="640" height="330" rx="14"/>
+  <text x="88" y="972" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1008" class="body">– Building SUP-AD: CLIP-based long-tail</text>
+  <text x="100" y="1030" class="body">scenario mining across a huge private</text>
+  <text x="100" y="1052" class="body">driving-log database (road debris, animals,</text>
+  <text x="100" y="1074" class="body">fallen trees, traffic-police gestures...).</text>
+  <text x="88" y="1108" class="body">– Evaluating subjective language output:</text>
+  <text x="100" y="1130" class="body">GPT-4-as-judge extracts key info, scores</text>
+  <text x="100" y="1152" class="body">partial matches, penalizes hallucination.</text>
+  <text x="88" y="1186" class="body">– DP-based meta-action sequence matcher</text>
+  <text x="100" y="1208" class="body">that tolerates semantically-equivalent</text>
+  <text x="100" y="1230" class="body">action orderings (LCS-style alignment).</text>
+
+  <rect class="card" x="740" y="930" width="640" height="330" rx="14"/>
+  <text x="768" y="972" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1008" class="body">– SOTA on nuScenes planning when paired</text>
+  <text x="780" y="1030" class="body">with VAD: L2 0.31m avg, Collision 0.10%</text>
+  <text x="780" y="1052" class="body">(vs. VAD-Base 0.37m / 0.14%).</text>
+  <text x="768" y="1086" class="body">– Best scores on the self-built SUP-AD</text>
+  <text x="780" y="1108" class="body">benchmark vs. fine-tuned Lynx/CogVLM</text>
+  <text x="780" y="1130" class="body">and in-context GPT-4V.</text>
+  <text x="768" y="1164" class="body">– Deployed and tested on a real production</text>
+  <text x="780" y="1186" class="body">vehicle with dual OrinX chips; ~410ms</text>
+  <text x="780" y="1208" class="body">average inference latency.</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1284" width="1320" height="96" rx="14" fill="#FBE3E3" stroke="#D65F5F"/>
+  <text x="88" y="1322" class="section-head" fill="#B23A3A">CODE / GITHUB</text>
+  <text x="88" y="1352" class="body">Project page only (tsinghua-mars-lab.github.io/DriveVLM) — no code release. SUP-AD dataset is proprietary (Li Auto). Not reproducible; use as a design reference only.</text>
+</svg>
