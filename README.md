@@ -15,6 +15,7 @@
 | 2 | DriveMLM | Tech report 2023 (v3 2025) | [notes/drivemlm.md](notes/drivemlm.md) | Repo exists, placeholder only |
 | 3 | LoRA | ICLR 2022 | [notes/lora.md](notes/lora.md) | Released & usable (microsoft/LoRA) |
 | 4 | Adaptive Mixtures of Local Experts | Neural Computation 1991 | [notes/mixture-of-local-experts.md](notes/mixture-of-local-experts.md) | N/A (pre-GitHub) |
+| 5 | Alpamayo-R1 | arXiv 2025 (v2 2026), NVIDIA | [notes/alpamayo-r1.md](notes/alpamayo-r1.md) | Weights + inference code released |
 
 ## 结构
 

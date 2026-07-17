@@ -1,0 +1,142 @@
+<svg width="1440" height="1420" viewBox="0 0 1440 1420" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 38px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 19px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1420"/>
+
+  <!-- Header -->
+  <text x="60" y="64" class="title">Alpamayo-R1</text>
+  <text x="60" y="94" class="subtitle">Bridging Reasoning and Action Prediction for Generalizable AD in the Long Tail · arXiv 2025 (v2 2026) · NVIDIA</text>
+  <text x="60" y="120" class="subtitle">arXiv:2511.00088</text>
+  <rect x="1030" y="48" width="350" height="36" rx="18" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="1205" y="71" text-anchor="middle" class="badge" fill="#2F6B3D">CODE: WEIGHTS + INFERENCE RELEASED</text>
+  <line x1="60" y1="145" x2="1380" y2="145" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="170" width="640" height="320" rx="14"/>
+  <text x="88" y="212" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="248" class="body">– E2E imitation-learned driving is brittle in</text>
+  <text x="100" y="270" class="body">long-tail, safety-critical scenarios: sparse</text>
+  <text x="100" y="292" class="body">supervision, limited causal understanding.</text>
+  <text x="88" y="326" class="body">– Prior reasoning VLAs use free-form CoT: vague</text>
+  <text x="100" y="348" class="body">("be cautious..."), superficial ("sunny weather"),</text>
+  <text x="100" y="370" class="body">or causally confused (reference future frames</text>
+  <text x="100" y="392" class="body">the model can't actually observe).</text>
+  <text x="88" y="426" class="body">– Reasoning that only "sounds right" isn't enough —</text>
+  <text x="100" y="448" class="body">it must be causally grounded AND drive the action.</text>
+
+  <rect class="card" x="740" y="170" width="640" height="320" rx="14"/>
+  <text x="768" y="212" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="248" class="body">– Chain of Causation (CoC): decision-grounded</text>
+  <text x="780" y="270" class="body">reasoning from a closed-set decision vocab (Tab.1)</text>
+  <text x="780" y="292" class="body">+ strict history/future keyframe split to prevent</text>
+  <text x="780" y="314" class="body">causal leakage.</text>
+  <text x="768" y="348" class="body">– Modular VLA: Cosmos-Reason (Physical-AI VLM) +</text>
+  <text x="780" y="370" class="body">flow-matching action-expert for real-time,</text>
+  <text x="780" y="392" class="body">continuous, multi-modal trajectories.</text>
+  <text x="768" y="426" class="body">– RL (GRPO) jointly optimizes reasoning quality,</text>
+  <text x="780" y="448" class="body">reasoning-action CONSISTENCY, and safety — not</text>
+  <text x="780" y="470" class="body">just fluent-sounding explanations.</text>
+
+  <!-- Row 2: ARCHITECTURE -->
+  <rect class="card" x="60" y="510" width="1320" height="420" rx="14"/>
+  <text x="88" y="552" class="section-head" fill="#EE854A">CORE IDEA — ARCHITECTURE (Fig. 1)</text>
+
+  <!-- inputs -->
+  <rect class="diagbox" x="90" y="820" width="320" height="70" stroke="#797979"/>
+  <text x="250" y="850" class="diagtext">Multi-cam video + Nav/User</text>
+  <text x="250" y="868" class="diagtext">text + Ego history</text>
+
+  <!-- encoders -->
+  <rect class="diagbox" x="90" y="720" width="320" height="70" stroke="#4878D0"/>
+  <text x="250" y="750" class="diagtext">Vision Encoder + Text Encoder</text>
+  <text x="250" y="770" class="diagsub">efficient multi-camera tokenization</text>
+  <line x1="250" y1="820" x2="250" y2="792" stroke="#4878D0" stroke-width="2.2" marker-end="url(#arrow5)"/>
+
+  <!-- backbone -->
+  <rect class="diagbox" x="450" y="720" width="280" height="70" stroke="#EE854A"/>
+  <text x="590" y="750" class="diagtext">Cosmos-Reason Backbone</text>
+  <text x="590" y="770" class="diagsub">Physical-AI VLM (distilled)</text>
+  <line x1="410" y1="755" x2="446" y2="755" stroke="#EE854A" stroke-width="2.2" marker-end="url(#arrow5)"/>
+
+  <!-- output stack -->
+  <rect class="diagbox" x="770" y="600" width="200" height="55" stroke="#956CB4"/>
+  <text x="870" y="632" class="diagtext">CoT Reasoning</text>
+
+  <rect class="diagbox" x="770" y="665" width="200" height="55" stroke="#956CB4"/>
+  <text x="870" y="697" class="diagtext">Meta-Actions</text>
+
+  <rect class="diagbox" x="770" y="730" width="200" height="55" stroke="#956CB4"/>
+  <text x="870" y="754" class="diagtext">Trajectory tokens</text>
+  <text x="870" y="770" class="diagsub">(discrete, 128/traj)</text>
+
+  <line x1="730" y1="735" x2="766" y2="640" stroke="#EE854A" stroke-width="2" marker-end="url(#arrow5)"/>
+  <line x1="870" y1="655" x2="870" y2="663" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow5)"/>
+  <line x1="870" y1="720" x2="870" y2="728" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow5)"/>
+  <text x="870" y="592" class="arrowlabel" fill="#7A5591">generated in this order, autoregressively</text>
+
+  <!-- flow matching decoder -->
+  <rect class="diagbox" x="1020" y="715" width="300" height="85" stroke="#6ACC64"/>
+  <text x="1170" y="745" class="diagtext">Action-Expert Flow-Matching</text>
+  <text x="1170" y="763" class="diagtext">Decoder</text>
+  <text x="1170" y="782" class="diagsub">inference only · 5 Euler steps · 8.75ms</text>
+  <line x1="970" y1="757" x2="1016" y2="757" stroke="#6ACC64" stroke-width="2.2" marker-end="url(#arrow5)"/>
+  <text x="993" y="742" class="arrowlabel" fill="#4C8C5B">not autoregressive</text>
+  <text x="993" y="805" class="arrowlabel" fill="#B23A3A">(alt: 222ms, too slow)</text>
+
+  <!-- final trajectory -->
+  <rect class="diagbox" x="1020" y="830" width="300" height="60" stroke="#6ACC64"/>
+  <text x="1170" y="855" class="diagtext">Continuous Trajectory</text>
+  <text x="1170" y="873" class="diagsub">kinematically-feasible waypoints</text>
+  <line x1="1170" y1="800" x2="1170" y2="826" stroke="#6ACC64" stroke-width="2.2" marker-end="url(#arrow5)"/>
+
+  <text x="88" y="915" class="body" fill="#6B7280">Trajectory tokens are NOT autoregressively sampled at inference (too slow) — the flow-matching decoder reads the reasoning output directly.</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="950" width="640" height="330" rx="14"/>
+  <text x="88" y="992" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1028" class="body">– Not the architecture (glue of existing parts) —</text>
+  <text x="100" y="1050" class="body">precise per-scenario keyframe rules (Tab.3) to</text>
+  <text x="100" y="1072" class="body">stop labelers from using future information.</text>
+  <text x="88" y="1106" class="body">– No prior metric could evaluate causal reasoning</text>
+  <text x="100" y="1128" class="body">text; built a structured True/False LLM-eval</text>
+  <text x="100" y="1150" class="body">protocol, validated at 92% human alignment.</text>
+  <text x="88" y="1184" class="body">– RL rollouts + LRM reward calls are expensive;</text>
+  <text x="100" y="1206" class="body">mine "high-disagreement" samples (model's own</text>
+  <text x="100" y="1228" class="body">logits vs. reward) to make training affordable.</text>
+
+  <rect class="card" x="740" y="950" width="640" height="330" rx="14"/>
+  <text x="768" y="992" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1028" class="body">– +12% open-loop accuracy on challenging scenes</text>
+  <text x="780" y="1050" class="body">(minADE6 0.994m→0.868m); -35% closed-loop close</text>
+  <text x="780" y="1072" class="body">encounter rate (17%→11%, AlpaSim).</text>
+  <text x="768" y="1106" class="body">– RL: +45% reasoning quality (3.1→4.5/5), +37%</text>
+  <text x="780" y="1128" class="body">reasoning-action consistency (0.62→0.85) — but</text>
+  <text x="780" y="1150" class="body">ONLY when the consistency reward is added too.</text>
+  <text x="768" y="1184" class="body">– 99ms end-to-end on-vehicle latency (under the</text>
+  <text x="780" y="1206" class="body">100ms real-time budget) via flow-matching, vs.</text>
+  <text x="780" y="1228" class="body">312ms if trajectory were auto-regressive.</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1284" width="1320" height="96" rx="14" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="88" y="1316" class="section-head" fill="#2F6B3D">CODE / GITHUB</text>
+  <text x="88" y="1344" class="body">Weights on HuggingFace (nvidia/Alpamayo-R1-10B) + inference code on GitHub (NVlabs/alpamayo), evaluated on public</text>
+  <text x="88" y="1366" class="body">PhysicalAI-AV + AlpaSim benchmarks. The 80,000-hour internal training set is NOT released — you can infer, not retrain from scratch.</text>
+</svg>
