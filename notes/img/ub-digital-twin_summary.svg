@@ -1,0 +1,127 @@
+<svg width="1440" height="1440" viewBox="0 0 1440 1440" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 36px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 17px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 11.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1440"/>
+
+  <!-- Header -->
+  <text x="60" y="60" class="title">Digital Twin of a Physical CAV Testbed</text>
+  <text x="60" y="90" class="subtitle">Constructing a Digital Twin of a Physical Testbed: A Practical Guide for Connected Autonomous Vehicle Simulation</text>
+  <text x="60" y="114" class="subtitle">IEEE IV Workshops 2026 · University at Buffalo (Thomas, Gedela, Pirangi, Rah, Kum, Korzelius, He, Sadek, Qiao)</text>
+  <text x="60" y="136" class="subtitle">DOI: 10.1109/IVWorkshops71735.2026.11623899</text>
+  <rect x="1000" y="46" width="380" height="36" rx="18" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="1190" y="69" text-anchor="middle" class="badge" fill="#2F6B3D">CODE: RELEASED, VERIFIED USABLE</text>
+  <line x1="60" y1="158" x2="1380" y2="158" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="178" width="640" height="320" rx="14"/>
+  <text x="88" y="220" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="256" class="body">– Real-world CAV design/verification is costly and</text>
+  <text x="100" y="278" class="body">unsafe for edge cases.</text>
+  <text x="88" y="312" class="body">– Existing digital twins solve only part of it: Unity</text>
+  <text x="100" y="334" class="body">twins lack SUMO/Autoware; Mcity is gold-standard</text>
+  <text x="100" y="356" class="body">but single-site; Gaussian Splatting looks great but</text>
+  <text x="100" y="378" class="body">CARLA can't render it natively.</text>
+  <text x="88" y="412" class="body">– Combining Autoware+CARLA+SUMO introduces an</text>
+  <text x="100" y="434" class="body">undocumented timing conflict.</text>
+
+  <rect class="card" x="740" y="178" width="640" height="320" rx="14"/>
+  <text x="768" y="220" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="256" class="body">– Site-agnostic map reconstruction: OSM roads +</text>
+  <text x="780" y="278" class="body">USGS DEM + LiDAR point cloud + photogrammetry —</text>
+  <text x="780" y="300" class="body">no proprietary infrastructure needed.</text>
+  <text x="768" y="334" class="body">– Diagnosed a silent "double-tick" bug: Autoware's</text>
+  <text x="780" y="356" class="body">CARLA bridge AND the SUMO-CARLA synchronizer</text>
+  <text x="780" y="378" class="body">both independently call world.tick().</text>
+  <text x="768" y="412" class="body">– "Time-follower mode": strip the bridge of tick</text>
+  <text x="780" y="434" class="body">authority — first open-source fix for this conflict.</text>
+
+  <!-- Row 2: ARCHITECTURE (Fig. 3) -->
+  <rect class="card" x="60" y="520" width="1320" height="430" rx="14"/>
+  <text x="88" y="562" class="section-head" fill="#EE854A">CORE IDEA — CO-SIMULATION TIMING FIX (Fig. 3)</text>
+
+  <!-- top row -->
+  <rect class="diagbox" x="90" y="630" width="220" height="90" stroke="#797979"/>
+  <text x="200" y="668" class="diagtext">SUMO</text>
+  <text x="200" y="686" class="diagsub">Traffic + Signals (TraCI)</text>
+
+  <rect class="diagbox" x="380" y="630" width="280" height="90" stroke="#EE854A"/>
+  <text x="520" y="662" class="diagtext">Time Master</text>
+  <text x="520" y="680" class="diagtext">SUMO-CARLA Synchronizer</text>
+  <text x="520" y="700" class="diagsub">sole authority to tick CARLA (after fix)</text>
+
+  <rect class="diagbox" x="730" y="630" width="280" height="90" stroke="#4878D0"/>
+  <text x="870" y="662" class="diagtext">CARLA (Sync)</text>
+  <text x="870" y="682" class="diagsub">Traffic · Ego · World + Sensors</text>
+
+  <rect class="diagbox" x="1080" y="630" width="260" height="90" stroke="#4878D0"/>
+  <text x="1210" y="662" class="diagtext">Autoware (Docker)</text>
+  <text x="1210" y="682" class="diagsub">ROS2 Humble</text>
+  <text x="1210" y="700" class="diagsub">Perception → Planning → Control</text>
+
+  <line x1="310" y1="675" x2="376" y2="675" stroke="#797979" stroke-width="2" marker-end="url(#arrow7)"/>
+  <line x1="660" y1="675" x2="726" y2="675" stroke="#EE854A" stroke-width="2.2" marker-end="url(#arrow7)"/>
+  <text x="693" y="660" class="arrowlabel" fill="#8A6D3B">tick</text>
+  <line x1="1010" y1="675" x2="1076" y2="675" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow7)"/>
+  <text x="1043" y="660" class="arrowlabel" fill="#3E5F94">sensors</text>
+
+  <!-- bottom row: bridge -->
+  <rect class="diagbox" x="1080" y="790" width="260" height="90" stroke="#D65F5F"/>
+  <text x="1210" y="822" class="diagtext">autoware_carla_interface</text>
+  <text x="1210" y="842" class="diagsub">external_tick: on/off · /clock</text>
+  <text x="1210" y="862" class="diagsub" fill="#B23A3A">✕ internal tick suppressed here (Fix 2)</text>
+
+  <line x1="1210" y1="720" x2="1210" y2="786" stroke="#D65F5F" stroke-width="2" marker-end="url(#arrow7)"/>
+  <text x="1270" y="755" class="arrowlabel" fill="#B23A3A">actuation</text>
+
+  <!-- curved return arrow: bridge -> CARLA ego -->
+  <path d="M 1076,835 C 900,835 800,790 800,722" fill="none" stroke="#D65F5F" stroke-width="2" marker-end="url(#arrow7)"/>
+  <text x="900" y="815" class="arrowlabel" fill="#B23A3A">control (applied to Ego in CARLA)</text>
+
+  <text x="88" y="915" class="body" fill="#6B7280">After the fix, only the Time Master calls world.tick() — Autoware's own internal tick is suppressed, eliminating the 1.92x drift.</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="970" width="640" height="330" rx="14"/>
+  <text x="88" y="1012" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1048" class="body">– Not an algorithm — a SILENT failure mode: nothing</text>
+  <text x="100" y="1070" class="body">crashes, but sensor timestamps drift ~92% ahead</text>
+  <text x="100" y="1092" class="body">of traffic state, corrupting downstream measures.</text>
+  <text x="88" y="1126" class="body">– Required active timestamp logging (Table II/Fig.4)</text>
+  <text x="100" y="1148" class="body">to catch it — functional testing alone can't.</text>
+  <text x="88" y="1182" class="body">– Map pipeline has the same bug pattern: RoadRunner</text>
+  <text x="100" y="1204" class="body">silently overwrites the world origin when GIS data</text>
+  <text x="100" y="1226" class="body">is imported after OSM.</text>
+
+  <rect class="card" x="740" y="970" width="640" height="330" rx="14"/>
+  <text x="768" y="1012" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1048" class="body">– Map fidelity: reconstructed mesh 0.635m ICP RMSE</text>
+  <text x="780" y="1070" class="body">vs. ground truth; CARLA's own map export is 3x</text>
+  <text x="780" y="1092" class="body">worse (1.831m).</text>
+  <text x="768" y="1126" class="body">– Before fix: CARLA advances ~1.92x SUMO's rate</text>
+  <text x="780" y="1148" class="body">(230s drift over 250 simulated seconds).</text>
+  <text x="768" y="1182" class="body">– After fix: exactly 1.00x, confirmed deterministic /</text>
+  <text x="780" y="1204" class="body">reproducible across repeated runs.</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1320" width="1320" height="96" rx="14" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="88" y="1352" class="section-head" fill="#2F6B3D">CODE / GITHUB</text>
+  <text x="88" y="1380" class="body">github.com/ub-cavas/UB-DigitalTwin — verified real, populated code: Autoware/CARLA/Map-Reconstruction/UB-MR submodules,</text>
+  <text x="88" y="1402" class="body">Docker configs, 5 documented usage modes, 150+ commits, tagged v1.0.0. Not a placeholder.</text>
+</svg>
