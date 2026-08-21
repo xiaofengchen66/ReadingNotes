@@ -5,6 +5,8 @@
 - **Link:** https://www.cs.toronto.edu/~hinton/absps/jjnh91.pdf
 - **来源说明:** 这篇不在 TimeSeriesMOE 仓库的本地下载列表里(1991 年的论文,早于 arXiv/GitHub 时代),我从 Hinton 个人主页(cs.toronto.edu/~hinton/absps)拿到了原文扫描 PDF,逐句核对过,不是转述二手资料。
 - **paper_matrix.csv id:** 无(不在 matrix 里,是老师给的"MoE 基础"必读源头,不是 traffic/diffusion 相关文献)
+- **Input / 输入:** 输入向量 x(实验里是元音的声学特征);同样的 x 会同时喂给所有专家网络和门控网络
+- **Output / 输出:** 输出向量 o(实验里是元音类别),由门控概率 p_j 选中的那个专家单独产生——不是所有专家输出的加权平均
 
 ## 中文精读
 

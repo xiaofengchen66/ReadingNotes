@@ -6,6 +6,8 @@
 - **Local PDF:** `papers/autonomous_driving_moe/2511.00088v2.pdf`
 - **paper_matrix.csv id:** `alpamayo_r1`
 - **Code / 模型:** 权重 https://huggingface.co/nvidia/Alpamayo-R1-10B ,推理代码 https://github.com/NVlabs/alpamayo(**已发布,可跑推理**,见第 6 节)
+- **Input / 输入:** 多路相机多时间步图像 + 自车历史运动数据 + 可选用户指令/导航文本
+- **Output / 输出:** 按顺序自回归生成的 CoT Reasoning(推理文本)→ Meta-Actions → 离散轨迹 token;推理时轨迹 token 不直接用,而是把推理输出交给 flow-matching 动作专家解码成连续、符合运动学约束的轨迹(waypoints)
 
 ## 中文精读
 

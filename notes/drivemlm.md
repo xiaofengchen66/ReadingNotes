@@ -6,6 +6,8 @@
 - **Local PDF:** `papers/autonomous_driving_moe/2312.09245v3.pdf`
 - **paper_matrix.csv id:** `drivemlm`
 - **Code:** https://github.com/OpenGVLab/DriveMLM (**占位仓库,代码和数据集尚未放出**, 见下)
+- **Input / 输入:** 多视角视频 I + LiDAR 点云 L + system message M(任务定义/交通规则/决策词表)+ 用户指令 U(文本)
+- **Output / 输出:** 离散决策状态 token S(speed × path,如 KEEP/ACCELERATE × FOLLOW/LEFT_CHANGE)+ 自然语言解释 E;S 直接送入现成运动规划模块(Apollo/AutoPilot)产生车辆控制信号
 
 ## 中文精读
 

@@ -6,6 +6,8 @@
 - **Local PDF:** `papers/autonomous_driving_moe/2106.09685v2.pdf`
 - **paper_matrix.csv id:** `lora`
 - **Code:** https://github.com/microsoft/LoRA(**已开源,含 RoBERTa/DeBERTa/GPT-2 的实现和模型 checkpoint**)
+- **Input / 输入:** 层级(数学层面):某个预训练权重矩阵 W0 作用的输入激活 x;流程级:一个预训练模型 + 一份下游任务训练数据
+- **Output / 输出:** 层级:h = W0x + (α/r)·BAx(和原层输出同形状);流程级:一个任务适配后的模型行为(效果持平/优于全量微调),但只训练了 A、B 两个小矩阵,部署时可合并回原模型、零推理延迟增加
 
 ## 中文精读
 

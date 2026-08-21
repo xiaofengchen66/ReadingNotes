@@ -5,6 +5,8 @@
 - **Link:** https://arxiv.org/abs/2402.12289
 - **Local PDF:** `papers/autonomous_driving_moe/2402.12289v5.pdf`
 - **paper_matrix.csv id:** `drivevlm`
+- **Input / 输入:** 多路环视摄像头视频(multi-view camera video,多个历史时间步)
+- **Output / 输出:** 三段式 CoT 文本(场景描述 + 场景分析 + meta-action/决策描述)+ 最终轨迹点 W_fast(DriveVLM-Dual 里由传统规划器高频输出)
 
 ## 中文精读
 
