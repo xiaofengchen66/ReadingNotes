@@ -1,0 +1,152 @@
+<svg width="1440" height="1440" viewBox="0 0 1440 1440" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 36px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 18px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 11.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 11.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1440"/>
+
+  <!-- Header -->
+  <text x="60" y="62" class="title">An Open Approach to Autonomous Vehicles</text>
+  <text x="60" y="92" class="subtitle">IEEE Micro, Nov/Dec 2015 · Nagoya University + Nagasaki University (Kato, Takeuchi, Ishiguro, Ninomiya, Takeda, Hamada)</text>
+  <text x="60" y="118" class="subtitle">doi.org/10.1109/MM.2015.133 — the founding paper of Autoware</text>
+  <rect x="1000" y="46" width="380" height="36" rx="18" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="1190" y="69" text-anchor="middle" class="badge" fill="#2F6B3D">CODE: OPEN &amp; MAINTAINED 10+ YEARS</text>
+  <line x1="60" y1="142" x2="1380" y2="142" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="166" width="640" height="310" rx="14"/>
+  <text x="88" y="208" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="244" class="body">– AV components were proprietary and fragmented</text>
+  <text x="100" y="266" class="body">in 2015 — commercial vehicles hide control</text>
+  <text x="100" y="288" class="body">interfaces; sensor configs differ per project.</text>
+  <text x="88" y="322" class="body">– Building a full AD stack from scratch is</text>
+  <text x="100" y="344" class="body">inefficient for every single research group.</text>
+  <text x="88" y="378" class="body">– No systematically organized, publicly</text>
+  <text x="100" y="400" class="body">accessible baseline platform existed.</text>
+
+  <rect class="card" x="740" y="166" width="640" height="310" rx="14"/>
+  <text x="768" y="208" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="244" class="body">– Not a new algorithm — a fully open, purchasable</text>
+  <text x="780" y="266" class="body">hardware recipe (ZMP Robocar + off-the-shelf</text>
+  <text x="780" y="288" class="body">LiDAR / camera / GPS).</text>
+  <text x="768" y="322" class="body">– Open-source software stack "Autoware" (built on</text>
+  <text x="780" y="344" class="body">ROS / PCL / OpenCV / CUDA) anyone can download.</text>
+  <text x="768" y="378" class="body">– Sample 3D-map and ROSBAG simulation datasets</text>
+  <text x="780" y="400" class="body">released too — no real car needed to start.</text>
+
+  <!-- Row 2: ARCHITECTURE (Fig. 2) -->
+  <rect class="card" x="60" y="506" width="1320" height="450" rx="14"/>
+  <text x="88" y="548" class="section-head" fill="#EE854A">CORE IDEA — SENSING → PLANNING → CONTROL PIPELINE (Fig. 2)</text>
+
+  <!-- Level 1: inputs -->
+  <rect class="diagbox" x="90" y="580" width="190" height="50" stroke="#797979"/>
+  <text x="185" y="610" class="diagtext">Point cloud data</text>
+
+  <rect class="diagbox" x="310" y="580" width="190" height="50" stroke="#797979"/>
+  <text x="405" y="610" class="diagtext">3D map data</text>
+
+  <rect class="diagbox" x="1080" y="580" width="190" height="50" stroke="#797979"/>
+  <text x="1175" y="610" class="diagtext">Image data</text>
+
+  <!-- Level 2 -->
+  <rect class="diagbox" x="150" y="650" width="230" height="55" stroke="#4878D0"/>
+  <text x="265" y="674" class="diagtext">Localization</text>
+  <text x="265" y="692" class="diagsub">3D NDT scan matching</text>
+
+  <rect class="diagbox" x="1055" y="650" width="230" height="55" stroke="#4878D0"/>
+  <text x="1170" y="674" class="diagtext">Object Detection</text>
+  <text x="1170" y="692" class="diagsub">DPM + HOG</text>
+
+  <line x1="185" y1="630" x2="240" y2="648" stroke="#797979" stroke-width="1.8" marker-end="url(#arrow6)"/>
+  <line x1="405" y1="630" x2="300" y2="648" stroke="#797979" stroke-width="1.8" marker-end="url(#arrow6)"/>
+  <line x1="1175" y1="630" x2="1170" y2="648" stroke="#797979" stroke-width="1.8" marker-end="url(#arrow6)"/>
+
+  <!-- Level 3 -->
+  <rect class="diagbox" x="150" y="725" width="230" height="55" stroke="#EE854A"/>
+  <text x="265" y="749" class="diagtext">Mission Planning</text>
+  <text x="265" y="767" class="diagsub">rule-based global route</text>
+
+  <rect class="diagbox" x="1055" y="725" width="230" height="55" stroke="#EE854A"/>
+  <text x="1170" y="749" class="diagtext">Object Tracking</text>
+  <text x="1170" y="767" class="diagsub">Kalman / Particle Filter</text>
+
+  <line x1="265" y1="705" x2="265" y2="723" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow6)"/>
+  <text x="330" y="718" class="arrowlabel" fill="#3E5F94">current position</text>
+  <line x1="1170" y1="705" x2="1170" y2="723" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow6)"/>
+
+  <!-- Level 4 -->
+  <rect class="diagbox" x="1055" y="800" width="230" height="55" stroke="#956CB4"/>
+  <text x="1170" y="824" class="diagtext">Reprojection</text>
+  <text x="1170" y="842" class="diagsub">2D detections → 3D coords</text>
+
+  <line x1="1170" y1="780" x2="1170" y2="798" stroke="#EE854A" stroke-width="2" marker-end="url(#arrow6)"/>
+
+  <!-- long crossing arrow: Localization current position -> Reprojection -->
+  <line x1="380" y1="685" x2="1051" y2="815" stroke="#3E5F94" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arrow6)"/>
+  <text x="700" y="740" class="arrowlabel" fill="#3E5F94">current position (for coordinate transform)</text>
+
+  <!-- Level 5: Motion Planning + Path Following -->
+  <rect class="diagbox" x="430" y="875" width="230" height="55" stroke="#956CB4"/>
+  <text x="545" y="899" class="diagtext">Motion Planning</text>
+  <text x="545" y="917" class="diagsub">A* / spatiotemporal lattice</text>
+
+  <line x1="265" y1="780" x2="470" y2="873" stroke="#EE854A" stroke-width="1.8" marker-end="url(#arrow6)"/>
+  <text x="380" y="850" class="arrowlabel" fill="#8A6D3B">global waypoint</text>
+
+  <line x1="1055" y1="840" x2="620" y2="890" stroke="#956CB4" stroke-width="1.8" marker-end="url(#arrow6)"/>
+  <text x="860" y="893" class="arrowlabel" fill="#7A5591">object positions in real world</text>
+
+  <rect class="diagbox" x="760" y="875" width="230" height="55" stroke="#6ACC64"/>
+  <text x="875" y="899" class="diagtext">Path Following</text>
+  <text x="875" y="917" class="diagsub">Pure Pursuit</text>
+
+  <line x1="660" y1="902" x2="756" y2="902" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow6)"/>
+  <text x="708" y="895" class="arrowlabel" fill="#7A5591">local waypoint</text>
+
+  <text x="88" y="944" class="body" fill="#6B7280">Output: velocity + steering angle, sent to the vehicle controller — this is the only point the pipeline actually touches the car.</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="976" width="640" height="330" rx="14"/>
+  <text x="88" y="1018" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1054" class="body">– Not any single algorithm (all cited from prior</text>
+  <text x="100" y="1076" class="body">work) — it's building a secure CAN-bus gateway</text>
+  <text x="100" y="1098" class="body">into a commodity vehicle in the first place.</text>
+  <text x="88" y="1132" class="body">– Hitting a hard, physically-derived 100ms real-</text>
+  <text x="100" y="1154" class="body">time budget (40km/h, 1m granularity) across a</text>
+  <text x="100" y="1176" class="body">heterogeneous CPU+GPU pipeline.</text>
+  <text x="88" y="1210" class="body">– The paper honestly reports its own bottleneck</text>
+  <text x="100" y="1232" class="body">(DPM detection: 100-200ms, over budget) instead</text>
+  <text x="100" y="1254" class="body">of hiding it.</text>
+
+  <rect class="card" x="740" y="976" width="640" height="330" rx="14"/>
+  <text x="768" y="1018" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1054" class="body">– Centimeter-level localization via 3D NDT scan</text>
+  <text x="780" y="1076" class="body">matching against a pre-built 3D map.</text>
+  <text x="768" y="1110" class="body">– Most real-time tasks run within 50ms on a</text>
+  <text x="780" y="1132" class="body">laptop GPU (i7 + GTX980M); object detection</text>
+  <text x="780" y="1154" class="body">is the acknowledged exception (100-200ms).</text>
+  <text x="768" y="1188" class="body">– Vehicle has driven a few hundred miles in</text>
+  <text x="780" y="1210" class="body">Nagoya, Japan, entirely under Autoware control.</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1330" width="1320" height="96" rx="14" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="88" y="1362" class="section-head" fill="#2F6B3D">CODE / GITHUB</text>
+  <text x="88" y="1390" class="body">Originally github.com/cpfl/autoware (2015), now maintained by the Autoware Foundation (github.com/autowarefoundation/autoware) —</text>
+  <text x="88" y="1412" class="body">one of the two dominant open-source full AD stacks in industry today (with Baidu Apollo), still actively developed a decade later.</text>
+</svg>
