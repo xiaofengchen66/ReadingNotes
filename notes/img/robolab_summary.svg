@@ -1,0 +1,147 @@
+<svg width="1440" height="1440" viewBox="0 0 1440 1440" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 40px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 17px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 11.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .arrowlabel { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#EE854A"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1440"/>
+
+  <!-- Header -->
+  <text x="60" y="60" class="title">RoboLab</text>
+  <text x="60" y="90" class="subtitle">A High-Fidelity Simulation Benchmark for Analysis of Task Generalist Policies</text>
+  <text x="60" y="114" class="subtitle">RSS 2026 · NVIDIA — Yang, Dagli, Zook, Hadfield, Goyal, Birchfield, Ramos, Tremblay</text>
+  <text x="60" y="136" class="subtitle">arXiv:2604.09860 · research.nvidia.com/labs/srl/projects/robolab</text>
+  <rect x="1030" y="46" width="350" height="36" rx="18" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="1205" y="69" text-anchor="middle" class="badge" fill="#2F6B3D">CODE: RELEASED, MATURE (452★)</text>
+  <line x1="60" y1="158" x2="1380" y2="158" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="178" width="640" height="320" rx="14"/>
+  <text x="88" y="220" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="256" class="body">– Real-world policy eval is too costly/slow at scale;</text>
+  <text x="100" y="278" class="body">sim benchmarks saturate fast and blur train/eval</text>
+  <text x="100" y="300" class="body">domains, trivializing success rate.</text>
+  <text x="88" y="334" class="body">– Task variation is usually ad hoc — can't cleanly</text>
+  <text x="100" y="356" class="body">attribute WHY a policy fails to a specific axis of</text>
+  <text x="100" y="378" class="body">generalization (visual? procedural? spatial?).</text>
+  <text x="88" y="412" class="body">– Real2sim (Gaussian Splatting) looks great but</text>
+  <text x="100" y="434" class="body">costs ~1hr/scene — doesn't scale to hundreds of tasks.</text>
+
+  <rect class="card" x="740" y="178" width="640" height="320" rx="14"/>
+  <text x="768" y="220" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="256" class="body">– LLM+human scene/task authoring, closed-loop</text>
+  <text x="780" y="278" class="body">validated by physics simulation — not just "LLM</text>
+  <text x="780" y="300" class="body">draws a scene and hopes it's valid."</text>
+  <text x="768" y="334" class="body">– RoboLab-120: 120 tasks × 3 competency axes</text>
+  <text x="780" y="356" class="body">(visual/procedural/relational) × 3 difficulty levels;</text>
+  <text x="780" y="378" class="body">train/eval domains fully decoupled.</text>
+  <text x="768" y="412" class="body">– Beyond success rate: graded scores, trajectory</text>
+  <text x="780" y="434" class="body">quality, event logs, Bayesian sensitivity analysis —</text>
+  <text x="780" y="456" class="body">plus PROVEN real-world correlation (ρ=1.00).</text>
+
+  <!-- Row 2: ARCHITECTURE -->
+  <rect class="card" x="60" y="520" width="1320" height="430" rx="14"/>
+  <text x="88" y="562" class="section-head" fill="#EE854A">CORE IDEA — GENERATION LOOP + DIAGNOSTIC EVALUATION (Fig. 1)</text>
+
+  <!-- top row: generation loop -->
+  <rect class="diagbox" x="90" y="630" width="220" height="80" stroke="#4878D0"/>
+  <text x="200" y="662" class="diagtext">LLM: Scene/Task</text>
+  <text x="200" y="680" class="diagtext">Proposal</text>
+  <text x="200" y="698" class="diagsub">theme e.g. "messy counter"</text>
+
+  <rect class="diagbox" x="350" y="630" width="230" height="80" stroke="#4878D0"/>
+  <text x="465" y="656" class="diagtext">Physics/Geometric Solver</text>
+  <text x="465" y="676" class="diagsub">Isaac Sim, 300-step sim</text>
+  <text x="465" y="694" class="diagsub">displacement &lt; 0.02m ?</text>
+
+  <rect class="diagbox" x="620" y="630" width="200" height="80" stroke="#6ACC64"/>
+  <text x="720" y="662" class="diagtext">Valid Scene</text>
+  <text x="720" y="680" class="diagtext">+ Task</text>
+
+  <rect class="diagbox" x="860" y="630" width="280" height="80" stroke="#EE854A"/>
+  <text x="1000" y="656" class="diagtext">RoboLab-120 Benchmark</text>
+  <text x="1000" y="676" class="diagsub">120 tasks × 3 axes</text>
+  <text x="1000" y="694" class="diagsub">(visual/procedural/relational) × 3 difficulty</text>
+
+  <line x1="310" y1="670" x2="346" y2="670" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow8)"/>
+  <line x1="580" y1="660" x2="616" y2="660" stroke="#6ACC64" stroke-width="2" marker-end="url(#arrow8)"/>
+  <text x="598" y="646" class="arrowlabel" fill="#4C8C5B">valid</text>
+  <line x1="820" y1="670" x2="856" y2="670" stroke="#EE854A" stroke-width="2" marker-end="url(#arrow8)"/>
+
+  <path d="M 460,712 C 460,745 250,745 210,714" fill="none" stroke="#D65F5F" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow8)"/>
+  <text x="335" y="740" class="arrowlabel" fill="#B23A3A">invalid → structured error feedback, retry</text>
+
+  <!-- bottom row: evaluation loop -->
+  <rect class="diagbox" x="90" y="775" width="250" height="85" stroke="#956CB4"/>
+  <text x="215" y="807" class="diagtext">Policy π Rollout</text>
+  <text x="215" y="825" class="diagsub">in Isaac Sim, N=10 episodes</text>
+  <text x="215" y="843" class="diagsub">per task</text>
+
+  <path d="M 1000,710 C 1000,760 400,760 220,773" fill="none" stroke="#8A6D3B" stroke-width="1.6" marker-end="url(#arrow8)"/>
+  <text x="700" y="775" class="arrowlabel" fill="#8A6D3B">sample a task from the benchmark</text>
+
+  <rect class="diagbox" x="380" y="775" width="320" height="85" stroke="#956CB4"/>
+  <text x="540" y="800" class="diagtext">Success/Score · Trajectory</text>
+  <text x="540" y="818" class="diagtext">(SPARC/speed/path) · Event Log</text>
+  <text x="540" y="838" class="diagsub">(wrong grasp / drop / collision)</text>
+
+  <rect class="diagbox" x="740" y="775" width="260" height="85" stroke="#4C8C5B"/>
+  <text x="870" y="807" class="diagtext">Sensitivity Analysis</text>
+  <text x="870" y="825" class="diagtext">(MNPE)</text>
+  <text x="870" y="843" class="diagsub">posterior over scene params</text>
+
+  <rect class="diagbox" x="1040" y="775" width="280" height="85" stroke="#4C8C5B"/>
+  <text x="1180" y="800" class="diagtext">Real-World Correlation</text>
+  <text x="1180" y="818" class="diagtext">Check (vs RoboArena)</text>
+  <text x="1180" y="838" class="diagsub">Spearman ρ = 1.00</text>
+
+  <line x1="340" y1="817" x2="376" y2="817" stroke="#956CB4" stroke-width="2" marker-end="url(#arrow8)"/>
+  <line x1="700" y1="817" x2="736" y2="817" stroke="#4C8C5B" stroke-width="2" marker-end="url(#arrow8)"/>
+  <line x1="1000" y1="817" x2="1036" y2="817" stroke="#4C8C5B" stroke-width="2" marker-end="url(#arrow8)"/>
+
+  <text x="88" y="915" class="body" fill="#6B7280">Score ≠ success: π0.5 gets 13.5% success but a 0.44 score on complex tasks — partial credit reveals policies that "almost" succeed.</text>
+
+  <!-- Row 3: HARDEST PART / EVIDENCE -->
+  <rect class="card" x="60" y="970" width="640" height="330" rx="14"/>
+  <text x="88" y="1012" class="section-head" fill="#956CB4">HARDEST PART</text>
+  <text x="88" y="1048" class="body">– Not benchmark design conceptually — building an</text>
+  <text x="100" y="1070" class="body">LLM+physics closed loop that reliably produces</text>
+  <text x="100" y="1092" class="body">physically VALID scenes, not just plausible ones.</text>
+  <text x="88" y="1126" class="body">– The MNPE sensitivity analysis infers full posteriors</text>
+  <text x="100" y="1148" class="body">over continuous scene params conditioned on</text>
+  <text x="100" y="1170" class="body">success — harder than a simple ablation table.</text>
+  <text x="88" y="1204" class="body">– Proving sim-to-real correlation, not just claiming</text>
+  <text x="100" y="1226" class="body">it: required an independent real-world benchmark.</text>
+
+  <rect class="card" x="740" y="970" width="640" height="330" rx="14"/>
+  <text x="768" y="1012" class="section-head" fill="#4C8C5B">EVIDENCE</text>
+  <text x="768" y="1048" class="body">– Score/success gap: π0.5 gets only 13.5% success but</text>
+  <text x="780" y="1070" class="body">0.44 score on complex tasks (Table I) — nearly half</text>
+  <text x="780" y="1092" class="body">the partial-credit milestones are still reached.</text>
+  <text x="768" y="1126" class="body">– Success requires the WRIST camera to stay near</text>
+  <text x="780" y="1148" class="body">its nominal pose; external camera pose is far more</text>
+  <text x="780" y="1170" class="body">forgiving (Fig. 9).</text>
+  <text x="768" y="1204" class="body">– Real-world correlation: Spearman ρ=1.00, Pearson</text>
+  <text x="780" y="1226" class="body">r=0.68 vs. RoboArena Elo across 4 policies (Fig. 10).</text>
+
+  <!-- Footer: code status -->
+  <rect x="60" y="1320" width="1320" height="96" rx="14" fill="#E1F0E3" stroke="#4C8C5B"/>
+  <text x="88" y="1352" class="section-head" fill="#2F6B3D">CODE / GITHUB</text>
+  <text x="88" y="1380" class="body">github.com/NVlabs/RoboLab — 452 stars, Apache 2.0, ~7GB of benchmark assets, full evaluation infrastructure, an interactive</text>
+  <text x="88" y="1402" class="body">web dashboard, example scripts for models like π0.5. The most mature open-source release in this reading list.</text>
+</svg>
