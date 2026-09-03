@@ -1,0 +1,143 @@
+<svg width="1440" height="1460" viewBox="0 0 1440 1460" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #FAFAF9; }
+    .card { fill: #FFFFFF; stroke: #E3E1DD; stroke-width: 1.5; }
+    .title { font: 700 36px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; }
+    .subtitle { font: 400 18px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; }
+    .section-head { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .body { font: 400 16.5px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .diagbox { fill: #FFFFFF; stroke-width: 2; rx: 10; }
+    .diagtext { font: 700 14px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1F2430; text-anchor: middle; }
+    .diagsub { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B7280; text-anchor: middle; }
+    .panellabel { font: 700 14px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #383D46; }
+    .arrowlabel { font: 400 12px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8A6D3B; text-anchor: middle; }
+    .badge { font: 700 15px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  </style>
+
+  <defs>
+    <marker id="arrow9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#797979"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#D65F5F"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1460"/>
+
+  <!-- Header -->
+  <text x="60" y="64" class="title">End-to-end Autonomous Driving</text>
+  <text x="60" y="94" class="subtitle">Challenges and Frontiers — TPAMI 46(12):10164–10183, 2024 · OpenDriveLab (Shanghai AI Lab) + U. Tübingen</text>
+  <text x="60" y="118" class="subtitle">Chen, Wu, Chitta, Jaeger, Geiger, Li · arXiv:2306.16927 · a survey of 270+ papers</text>
+  <rect x="1000" y="46" width="380" height="36" rx="18" fill="#E3EBF7" stroke="#4878D0"/>
+  <text x="1190" y="69" text-anchor="middle" class="badge" fill="#2C4A8A">RESOURCES: CURATED LIT. REPO (3.7k★)</text>
+  <line x1="60" y1="142" x2="1380" y2="142" stroke="#E3E1DD" stroke-width="2"/>
+
+  <!-- Row 1: PROBLEM / NOVELTY -->
+  <rect class="card" x="60" y="162" width="640" height="320" rx="14"/>
+  <text x="88" y="204" class="section-head" fill="#D65F5F">PROBLEM</text>
+  <text x="88" y="240" class="body">– Modular perception→prediction→planning pipelines</text>
+  <text x="100" y="262" class="body">have misaligned per-module objectives and</text>
+  <text x="100" y="284" class="body">compounding errors across stages.</text>
+  <text x="88" y="318" class="body">– The end-to-end field exploded (270+ papers) with</text>
+  <text x="100" y="340" class="body">no unified framework organizing paradigms,</text>
+  <text x="100" y="362" class="body">benchmarks, and common pitfalls.</text>
+  <text x="88" y="396" class="body">– New researchers can't easily build a global picture</text>
+  <text x="100" y="418" class="body">of the field from scattered individual papers.</text>
+
+  <rect class="card" x="740" y="162" width="640" height="320" rx="14"/>
+  <text x="768" y="204" class="section-head" fill="#4878D0">NOVELTY</text>
+  <text x="768" y="240" class="body">– Not a new method — the first systematic taxonomy:</text>
+  <text x="780" y="262" class="body">methods (IL: behavior cloning + inverse optimal</text>
+  <text x="780" y="284" class="body">control, vs. RL), benchmarking (open/closed-loop).</text>
+  <text x="768" y="318" class="body">– Nine challenge categories, each with why-it-matters</text>
+  <text x="780" y="340" class="body">+ existing solutions + open problems.</text>
+  <text x="768" y="374" class="body">– The authors' own stance on future trends (e.g.</text>
+  <text x="780" y="396" class="body">"modular end-to-end planning" over pure black-box),</text>
+  <text x="780" y="418" class="body">not just a literature list.</text>
+
+  <!-- Row 2: TAXONOMY DIAGRAM -->
+  <rect class="card" x="60" y="512" width="1320" height="460" rx="14"/>
+  <text x="88" y="554" class="section-head" fill="#EE854A">CORE IDEA — SURVEY TAXONOMY (Fig. 1)</text>
+
+  <!-- Panel A: classical -->
+  <text x="88" y="588" class="panellabel">(a) Classical Pipeline — each module optimized separately</text>
+  <rect class="diagbox" x="110" y="598" width="160" height="50" stroke="#797979"/>
+  <text x="190" y="628" class="diagtext">Perception</text>
+  <rect class="diagbox" x="340" y="598" width="160" height="50" stroke="#797979"/>
+  <text x="420" y="628" class="diagtext">Prediction</text>
+  <rect class="diagbox" x="570" y="598" width="160" height="50" stroke="#797979"/>
+  <text x="650" y="628" class="diagtext">Planning</text>
+  <line x1="270" y1="623" x2="336" y2="623" stroke="#797979" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow9)"/>
+  <line x1="500" y1="623" x2="566" y2="623" stroke="#797979" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arrow9)"/>
+
+  <!-- Panel B: end-to-end -->
+  <text x="88" y="675" class="panellabel">(b) End-to-end Paradigm — features flow forward (gray), gradients flow back through everything (red)</text>
+  <rect class="diagbox" x="110" y="685" width="140" height="55" stroke="#4878D0"/>
+  <text x="180" y="717" class="diagtext">Perception</text>
+  <rect class="diagbox" x="270" y="685" width="140" height="55" stroke="#4878D0"/>
+  <text x="340" y="717" class="diagtext">Module X</text>
+  <rect class="diagbox" x="430" y="685" width="170" height="55" stroke="#4878D0"/>
+  <text x="515" y="710" class="diagtext">Prediction /</text>
+  <text x="515" y="726" class="diagtext">Mapping</text>
+  <rect class="diagbox" x="620" y="685" width="140" height="55" stroke="#4878D0"/>
+  <text x="690" y="717" class="diagtext">Module Y</text>
+  <rect class="diagbox" x="780" y="685" width="140" height="55" stroke="#4878D0"/>
+  <text x="850" y="717" class="diagtext">Planning</text>
+
+  <line x1="250" y1="712" x2="266" y2="712" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow9)"/>
+  <line x1="410" y1="712" x2="426" y2="712" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow9)"/>
+  <line x1="600" y1="712" x2="616" y2="712" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow9)"/>
+  <line x1="760" y1="712" x2="776" y2="712" stroke="#4878D0" stroke-width="2" marker-end="url(#arrow9)"/>
+
+  <path d="M 850,742 C 850,800 180,800 180,742" fill="none" stroke="#D65F5F" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="515" y="795" class="arrowlabel" fill="#B23A3A">backpropagation — single shared optimization target</text>
+
+  <!-- Category boxes -->
+  <rect class="diagbox" x="110" y="830" width="380" height="90" stroke="#956CB4"/>
+  <text x="300" y="856" class="diagtext">METHODS (§2)</text>
+  <text x="300" y="876" class="diagsub">Imitation Learning {BC, IOC}</text>
+  <text x="300" y="894" class="diagsub">vs. Reinforcement Learning (RL still behind IL)</text>
+
+  <rect class="diagbox" x="520" y="830" width="380" height="90" stroke="#956CB4"/>
+  <text x="710" y="856" class="diagtext">BENCHMARKING (§3)</text>
+  <text x="710" y="876" class="diagsub">Open-loop (fast, can be misleading)</text>
+  <text x="710" y="894" class="diagsub">vs. Closed-loop (CARLA/nuPlan, sim-to-real gap)</text>
+
+  <rect class="diagbox" x="930" y="830" width="380" height="90" stroke="#956CB4"/>
+  <text x="1120" y="856" class="diagtext">FUTURE TRENDS (§5)</text>
+  <text x="1120" y="876" class="diagsub">Zero/Few-shot · Modular E2E Planning</text>
+  <text x="1120" y="894" class="diagsub">Data Engine · Foundation Model</text>
+
+  <text x="88" y="937" class="body" fill="#6B7280">§4's nine challenges: input modality · visual abstraction · world models · multi-task learning · policy distillation ·</text>
+  <text x="88" y="958" class="body" fill="#6B7280">interpretability · safety guarantees · causal confusion · robustness/generalization.</text>
+
+  <!-- Row 3: HARDEST PART (for reader) / EVIDENCE -->
+  <rect class="card" x="60" y="992" width="640" height="330" rx="14"/>
+  <text x="88" y="1034" class="section-head" fill="#956CB4">HARDEST PART (for the reader)</text>
+  <text x="88" y="1070" class="body">– Not any single challenge — building a mental map</text>
+  <text x="100" y="1092" class="body">of how the 9 categories relate (data/representation</text>
+  <text x="100" y="1114" class="body">vs. training paradigm vs. system trustworthiness).</text>
+  <text x="88" y="1148" class="body">– Separating this survey's synthesis from what's</text>
+  <text x="100" y="1170" class="body">inherited from the 270+ cited works.</text>
+  <text x="88" y="1204" class="body">– The framing may carry bias: authors (OpenDriveLab)</text>
+  <text x="100" y="1226" class="body">are major contributors to this field (UniAD, VAD) —</text>
+  <text x="100" y="1248" class="body">cross-check against Tesla/Wayve public reports.</text>
+
+  <rect class="card" x="740" y="992" width="640" height="330" rx="14"/>
+  <text x="768" y="1034" class="section-head" fill="#4C8C5B">EVIDENCE / KEY EXAMPLE</text>
+  <text x="768" y="1070" class="body">– Causal confusion (Fig.7): a car waiting at a red</text>
+  <text x="780" y="1092" class="body">light has near-zero speed correlated with braking —</text>
+  <text x="780" y="1114" class="body">model learns "low speed→brake," not "red light→brake."</text>
+  <text x="768" y="1148" class="body">– RL vs IL, stated plainly: "no report has shown</text>
+  <text x="780" y="1170" class="body">results for end-to-end RL competitive with IL" —</text>
+  <text x="780" y="1192" class="body">RL gradients too weak for deep perception backbones.</text>
+  <text x="768" y="1226" class="body">– "End-to-end ≠ black box": SOTA systems keep</text>
+  <text x="780" y="1248" class="body">detection/BEV outputs but optimize everything jointly.</text>
+
+  <!-- Footer: resources -->
+  <rect x="60" y="1342" width="1320" height="96" rx="14" fill="#E3EBF7" stroke="#4878D0"/>
+  <text x="88" y="1374" class="section-head" fill="#2C4A8A">RESOURCES / GITHUB</text>
+  <text x="88" y="1402" class="body">github.com/OpenDriveLab/End-to-end-Autonomous-Driving — a curated literature repo (3.7k★, 338 forks): papers.md,</text>
+  <text x="88" y="1424" class="body">courses, workshop resources, competition links. Actively updated through CVPR 2024. Not runnable code.</text>
+</svg>

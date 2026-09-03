@@ -7,6 +7,7 @@
   - 关键概念第一次出现时,中文后面用英文括号注释(方便之后用英文讲解/组会汇报)
   - 关键原文摘录(中英对照):5 句左右最关键的原文逐字引用 + 中文翻译 + 批注,并尽量把论点和论文里的具体表格/公式数字对应起来
 - 英文一目了然总结:一张大尺寸结构化 SVG 海报(问题/新意/架构图/难点/证据/代码可用性)+ 图解读(逐框讲解)+ 中英对照表格
+- **2026-08-22 起新增**(仅用于此后新写的论文,未回填旧笔记):开头一段 TL;DR(问题→Gap→Novelty→核心洞察→方法/论证→结果→意义)、按重要性排序并逐条配证据的贡献列表、明确的 Novelty 分类判断(新问题/新insight/新方法/新理论/新数据集/新场景,且要说清是首创还是改进组合)、"可略过背景"清单、更严格的假设/局限/质疑点、"一个月后记住5件事"
 
 ## Index
 
@@ -20,6 +21,7 @@
 | 6 | An Open Approach to Autonomous Vehicles (Autoware) | IEEE Micro 2015 | [notes/autoware.md](notes/autoware.md) | Open & maintained 10+ years |
 | 7 | Constructing a Digital Twin of a Physical Testbed (UB CAVAS) | IEEE IV Workshops 2026 | [notes/ub-digital-twin.md](notes/ub-digital-twin.md) | Released, verified usable (ub-cavas/UB-DigitalTwin) |
 | 8 | RoboLab | RSS 2026, NVIDIA | [notes/robolab.md](notes/robolab.md) | Released, mature (NVlabs/RoboLab, 452★) |
+| 9 | End-to-end Autonomous Driving: Challenges and Frontiers (survey) | TPAMI 2024, OpenDriveLab | [notes/end-to-end-ad-survey.md](notes/end-to-end-ad-survey.md) | Curated lit. repo, not code (3.7k★) |
 
 ## 结构
 
