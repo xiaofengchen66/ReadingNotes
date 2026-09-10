@@ -136,3 +136,49 @@ Acknowledgments 和长达数页的 Reference list。
 ④ 因果混淆是端到端驾驶的老大难问题:模型会学会用车速这种和动作强相关但没有因果关系的"捷径特征"作弊(红灯停车例子),现有解法(单帧输入、随机丢弃历史信息)都只是缓解不是根治。
 
 ⑤ 未来趋势判断:业界和学界都在往"保留一定模块化设计但整体联合优化"的方向走(不是纯端到端黑箱),外加基础模型/世界模型/数据引擎会是下一步的关键推动力。
+
+---
+
+## 精读补充:疑问与澄清(Q&A)
+
+这一节记录我读 §4.6(可解释性剩余部分)、§4.9.3(Domain Adaptation)、§5(Future Trends)、§6(Conclusion)时具体卡住、又想明白的点,按论文自己的小节编号组织。内容已经对照原文核实过,不是转述别人的转述。
+
+### §4.6 续:Cost Learning 和 Linguistic Explainability 是两条完全不同的可解释性路线
+
+**Rules Integration and Cost Learning(规则集成/代价学习)**:不是把 camera 直接黑箱映射到 trajectory,而是先生成一批候选轨迹,再给每条打分,选 cost 最低的:
+
+τ* = argmin_τ C(τ),其中 C(τ) = C_collision + C_traffic_rule + C_comfort + C_route
+
+这样"为什么选这条"就能拆成具体分项——比如"候选 B 离前车太近,collision cost 高;候选 C 靠近行人,safety cost 高;候选 A 各项都低,所以选 A"。原文点了三篇代表作:NMP、DSDNet 先做检测 + 运动预测,建一个"cost volume"(可以想成一张危险程度地图,轨迹穿过高 cost 区域就不会被选中);P3 更进一步用**语义占据图**(不只知道"这里被占用",还知道"占用的是车/人/路"),再叠加舒适度和交通规则约束——这让"为什么没选 B/C、选了 A"完全可拆解、可审计,论文原话是这类方法"share similarities with traditional modular systems and thus exhibit a certain level of interpretability"(和传统模块化系统很像,所以天然带一定可解释性)。
+
+**Linguistic Explainability(语言解释)**:另一条完全不同的路——模型除了输出动作,同时用自然语言说明理由("我正在减速,因为前面有行人正在过马路")。这需要专门的数据集,不能只有 video+trajectory,还要有 description/reasoning 标注。论文举了 ADAPT 这个例子:用 Transformer 网络"jointly estimate action, narration, and reasoning"——三者分工是 Action(我做什么)、Narration(我看到了什么)、Reasoning(我为什么这么做),比单纯的 saliency map("我主要看了这里")信息量大得多。
+
+**这两条路线最关键的区别,也是后面读 Alpamayo-R1 时会反复碰到的同一个问题**:Cost/Rules 的因果链是显式、可审计的;Language Reasoning 虽然最像人类解释,但存在一个根本性风险——**模型说出来的理由不一定是它真正做决定的原因**(unfaithful explanation,模型完全可能先决定了动作,再编一个听起来合理的解释)。这也是 Alpamayo-R1 要专门设计"推理-动作一致性奖励"去强制两者对齐的原因,不是巧合。
+
+### §4.9.3:Domain Adaptation 和 Covariate Shift 容易混,这样分清
+
+**Domain Adaptation(域适应)**解决的是"环境本身换了"——训练在仿真器(CARLA),部署到真实世界;训练在晴天,部署在雪天;训练用 A 相机,换车后用 B 相机。论文列了五种会叠加的 shift:sim-to-real、地理位置(geography-to-geography)、天气、昼夜、传感器型号——而且这些可以同时发生,难度直接叠加。
+
+**和 Covariate Shift 的区别**:Covariate Shift 是"策略自己开出了训练数据没见过的状态"(学生司机自己开偏了,开到了专家轨迹从没出现过的位置,根因是策略本身导致状态分布变化);Domain Shift 是"世界本身变了"(仿真↔真实、晴天↔下雪,根因是外部环境变化,和策略好坏无关)。一句话记:**Covariate Shift 是我自己开到了陌生状态,Domain Shift 是世界换了**。
+
+解决思路主要三种:①**domain-invariant feature learning**——不管输入是仿真画风还是真实画风,都编码成同一种语义抽象("这里有车、有路、有行人",而不是像素风格本身),常见做法是用 GAN/图像翻译把仿真图像转成真实风格,或者把两边都映射到同一个 latent space;②**domain-specific vs domain-general 拆分**(LUSR/UAIL)——把 latent 表征拆成"和领域无关的部分"(前面有车、道路左弯)和"领域相关的部分"(仿真材质、真实相机噪声),只让 driving policy 依赖前者;③**domain randomization**——反其道而行之,不追求仿真器逼真,而是训练时把天气/光照/纹理/相机位置疯狂随机化,让真实世界变成模型见过的众多变体之一。
+
+论文还有一个值得记的批评:大多数 domain adaptation 研究只关心"视觉差距",但 sim-to-real gap 不只是视觉的——仿真里其他司机的行为往往比真实世界规矩得多(真实司机会加塞、犹豫、突然刹车),LiDAR 的噪声/密度/波束模式也存在仿真-真实差异。这也是为什么 NeRF 这类"把真实世界数据直接重建进仿真器"的技术被寄予厚望——这条思路后来在 UB Digital Twin 那篇笔记里也出现过(用真实点云 + 照片测量重建场地),是同一条脉络。
+
+### §5.1:Zero-shot / Few-shot 里的 "shot" 是什么意思
+
+**"shot" = 给模型看的训练示例(example/demonstration)**,不是别的意思。Zero-shot = 不给新领域/新任务的任何示例,直接让模型处理;Few-shot = 只给少量示例(比如 5、10 个)就要求模型快速适应。这个用法在 LLM prompting 里是同一个词:不给任何范例直接让模型分类,是 zero-shot prompting;先给 3 个分类范例再让它做,是 3-shot prompting。放进这篇综述的语境:训练域是晴天+加州,能不能零标注就应对暴雪+水牛城,这就是 zero-shot generalization,和 §4.9.3 的 Domain Adaptation 是自然衔接的下一步问题("怎么适应新域" → "能不能不用新域数据就直接泛化过去")。
+
+### §5.2–§5.4:Future Trends 三个方向补充理解
+
+**§5.2 Modular End-to-end Planning**:传统模块化(每个模块各自优化局部指标,比如检测模块只管 mAP)和纯端到端黑箱之间的折中——模块还在(所以可解释、好调试),但整个系统围绕最终 Planning 目标联合优化。关键好处是"重要性"会被系统自动捕捉:一个很远、根本不影响驾驶的车检测差一点无所谓,但一个正在横穿马路的行人检测错了就是灾难,这种权重分配只有在**围绕最终任务联合优化**时才会自动出现,而不是靠人工给每个检测目标手动定权重。
+
+**§5.3 Data Engine**:建立"收集 → 挖掘困难案例 → 自动标注 → 训练 → 评估 → 找失败场景 → 再收集"的持续迭代闭环("data flywheel"),本质是长尾问题(§4.9.1)的工程解法——与其被动等长尾场景出现,不如主动去大规模车队数据里挖模型表现差的场景,针对性地补数据。
+
+**§5.4 Foundation Model**:这节和 WA-JEPA/Drive-JEPA/Alpamayo-R1 这条线关系最大。作者认为直接把 LLM 搬来开车有个根本问题——LLM 的语言生成允许一定的随机性/大概性("前方车辆大约 10 米"这种表述聊天没问题),但驾驶控制需要精确、稳定、连续的数值(方向盘打 0.12 和 0.42 是完全不同的动作),这是"plausible, human-like"(语言生成的目标)和"precise, stable, continuous"(驾驶控制的要求)之间的根本冲突。所以作者更看好训练一个能预测"世界接下来会怎样"的 world model(可以是 2D 图像、3D 场景,或者像 JEPA 这样直接在 latent space 里预测未来表征),再在这个表征基础上做 planning——这正好是 WA-JEPA 笔记里详细展开的那条技术路线,这篇综述早在 2023–2024 年就已经预判到了这个方向。
+
+### §6 Conclusion & Outlook:落到 "Generalist Agent" 这个目标
+
+结论部分没有新技术,主要是收尾。**Outlook 的核心判断**:传统模块化系统在高速公路这种结构化环境已经做得不错,但城市路口这种高度交互的场景(红绿灯 + 行人 + 自行车 + 对向车 + 路权 + 遮挡)容易在模块间的信息传递里丢失关键信息、错误逐级传递——这是作者认为端到端更有潜力的地方,前提是"extensive high-quality data collection, large-scale model training, and the establishment of reliable benchmarks"(高质量大数据 + 大规模训练 + 可靠评测)三者都到位,而不是无条件看好。
+
+最终目标落在 **Generalist Agent(通才驾驶智能体)**:不是"专精高速的模型"+"专精停车的模型"分开做,而是一个模型能应对各种场景、甚至没见过的新场景也能合理处理。作者给出的路径是:大规模数据 + 基础模型/世界模型 + 更好的表征 + 规划——这条线正好和 WA-JEPA(先学一个能预测未来的 latent representation,再在这个表征上做 planning)、Alpamayo-R1(理解场景 + 推理 + 动作)对得上,这份综述实际上早早地给这两条后来的工作画好了方向图。
