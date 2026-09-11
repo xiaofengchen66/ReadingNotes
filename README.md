@@ -28,6 +28,9 @@
 | 13 | Drive-JEPA | arXiv 2026 (2601.22032) | [notes/drive-jepa.md](notes/drive-jepa.md) | Pending release (V-JEPA base: facebookresearch/jepa) |
 | 14 | SparseDriveV2 | arXiv 2026 (2603.29163), ECCV 2026 | [notes/sparsedrivev2.md](notes/sparsedrivev2.md) | Released with weights (swc-17/SparseDriveV2) |
 | 15 | NAVSIM | NeurIPS 2024 (2406.15349) | [notes/navsim.md](notes/navsim.md) | Released, actively maintained (autonomousvision/navsim, 1.1k★) — source of PDMS/EPDMS used across most of the papers above |
+| 16 | ARTEMIS | arXiv 2025 (2504.19580) | [notes/artemis.md](notes/artemis.md) | Genuine MoE (routed, input-dependent) |
+| 17 | WAM-Diff | arXiv 2026 (2512.11872) | [notes/wam-diff.md](notes/wam-diff.md) | Genuine MoE (routed, input-dependent), single-image only |
+| 18 | CoWorld-VLA | arXiv 2026 (2605.10426), Afari Intelligent Drive | [notes/coworld-vla.md](notes/coworld-vla.md) | **NOT true MoE** — 4 always-active branches fused via fixed global scalar weights, no gating/routing; released & runnable (AFARI-Research/CoWorld-VLA, 10★) |
 
 ## Synthesis(跨论文综合分析)
 
