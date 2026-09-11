@@ -110,3 +110,35 @@ Transformer注意力机制中存储信息的两个矩阵。Query（查询）用�
 强化学习中最常用的策略优化算法。核心思想：限制每次策略更新的幅度（用clip截断），防止新策略与旧策略差距过大导致训练崩溃。"Proximal（近端）"即指新旧策略要保持"近邻"关系。相比早期RL算法（如REINFORCE）更稳定，是ChatGPT、驾驶RL等大规模RL训练的标准选择。DriveZero用PPO在闭环仿真中训练DriveRL教师策略。
 → 首次问到：*DriveZero*（2026-09-10）
 
+
+## DriveZero (arXiv 2609.06055, Xiaomi EV, 2026)
+
+**Privileged Policy（特权策略）**: 在仿真环境中能看到完整真实状态（如所有车辆的精确速度、加速度、意图）的策略，相当于"作弊"——现实中传感器感知到的信息远不如它完整。用作 RL 训练的教师，学生 policy（只有真实传感器输入）通过模仿它学习，再经 RL 进一步提升。首次出现：DriveZero
+
+**Mixed-agent Interactive World（混合智能体交互世界）**: 仿真场景中，背景车辆不再只是回放记录（log replay），而是混合了：① 日志回放（真实轨迹）、② 规则式 agent（IDM 等）、③ 学到的 policy。使场景更"活"，自我车辆的行为会真正影响背景车的反应，避免 reward hacking（找到一个只在静态场景有效的捷径）。首次出现：DriveZero
+
+**Knowledge Distillation（知识蒸馏）**: 让小模型（学生）学习大模型/复杂模型（教师）输出的分布，而不是直接学人工标注的 ground truth。DriveZero 中：DriveVFM 用 4 个大型视觉基础模型当教师，训练一个紧凑的 perception 骨干；DriveRL 的学生 policy 蒸馏特权 policy 的行为。首次出现：DriveZero
+
+**Augmented Goals（增广目标/辅助目标）**: 在 RL 训练中，主奖励函数之外额外加入的辅助奖励项，帮助探索和稳定训练。DriveZero 引入了感知辅助奖励（如检测到障碍物给 bonus），让 agent 在稀疏主奖励下学得更快、行为更安全。首次出现：DriveZero
+
+**Imitation Learning（模仿学习，IL）**: 直接从人类驾驶演示数据中学习，本质是监督学习——给定观测，预测人类动作。等价于 SFT。问题：分布偏移（distribution shift）——测试时遇到训练数据未覆盖的状态。DriveZero 的核心论点之一：纯 IL 上限是人类水平，RL 可突破这个上限（95.3 PDMS > 人类 94.8）。首次出现：DriveZero（对比使用）
+
+## Drive-JEPA (arXiv 2601.22032, 2026)
+
+**V-JEPA / JEPA（Video Joint-Embedding Predictive Architecture，视频联合嵌入预测架构）**: LeCun 提出的学习范式：在 latent 空间预测被 mask 掉的视频块的表征，不重建原始像素。核心哲学：模型不应浪费能力预测像素噪声（树叶位置、云的纹理），只需要学习可预测的语义结构（谁在动、往哪走）。EMA 副本防 representation collapse。Drive-JEPA 把它用于驾驶视频预训练。首次出现：Drive-JEPA
+
+**Representation Collapse（表征坍塌）**: Latent 预测模型的通病——两个 encoder 互相"作弊"，把所有输入映射到相似的常数向量，loss 降到0但什么也没学。V-JEPA 用 stop-gradient + EMA 解决：target encoder 是 online encoder 的慢速移动平均，不参与梯度更新。首次出现：Drive-JEPA
+
+**EMA（指数移动平均，Exponential Moving Average）**: 参数更新方式：θ_target = m·θ_target + (1-m)·θ_online，m 接近1（如0.996）。Target encoder 慢慢跟随 online encoder 变化，不直接用反向传播更新，提供稳定的学习目标。首次出现：Drive-JEPA
+
+**Proposal-Centric Planner（候选轨迹规划器）**: 同时生成 N 条候选轨迹（proposals），每条独立打分，选最优一条执行。区别于直接回归单条轨迹：能表达"左转"和"直行"两种合理选择并各自评估。Drive-JEPA 用 WADA 生成候选，EPDMS 打分。首次出现：Drive-JEPA
+
+**Multimodal Trajectory Distillation（多模态轨迹蒸馏）**: 从人类轨迹数据 k-means 聚类出8192条轨迹词表，对每个训练场景把所有词表轨迹放进仿真器跑 EPDMS 打分，筛出高分的多条作为伪教师轨迹，和真实人类轨迹一起监督训练。打破"每个场景只有一条正确答案"的限制。首次出现：Drive-JEPA
+
+**EPDMS（Extended PDM Score）**: NAVSIM v2 的综合评测指标，综合多项子分：碰撞、交通规则合规、车道保持、行驶方向、舒适度等。Drive-JEPA 用它给仿真候选轨迹打分，也用它评测最终性能（87.8 EPDMS SOTA）。首次出现：Drive-JEPA
+
+**Momentum-Aware Trajectory Selection（动量感知轨迹选择）**: 选最终轨迹时，不只看安全分，还加入"帧间舒适度"项——参考上一帧选中的轨迹，惩罚和上帧差距太大的选择，避免车辆轨迹逐帧跳变导致乘客不舒适。首次出现：Drive-JEPA
+
+**Interactive Behavior Planning（交互式行为规划）**: 规划时将其他车辆建模为"会响应自车行为的 agent"（而非沿固定轨迹走的障碍物），预测其意图，考虑多车博弈。Drive-JEPA 不做这个——它把背景车当障碍物，用 EPDMS 静态检查碰撞。真正做这个需要 Motion Forecasting 模块。首次出现：Drive-JEPA 阅读讨论
+
+**NAVSIM**: 自动驾驶 open-loop / pseudo-closed-loop 评测基准（nuPlan/nuScenes 数据），不需要完整仿真器，用真实日志场景 + rule-based 评分。v1 指标为 PDMS，v2 扩展为 EPDMS。Drive-JEPA：v1 93.3 PDMS，v2 87.8 EPDMS（均为 SOTA）。首次出现：Drive-JEPA

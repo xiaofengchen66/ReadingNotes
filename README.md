@@ -24,6 +24,9 @@
 | 9 | End-to-end Autonomous Driving: Challenges and Frontiers (survey) | TPAMI 2024, OpenDriveLab | [notes/end-to-end-ad-survey.md](notes/end-to-end-ad-survey.md) | Curated lit. repo, not code (3.7k★) |
 | 10 | WA-JEPA | arXiv 2026 | [notes/wa-jepa.md](notes/wa-jepa.md) | Released, weights included (39★) |
 | 11 | Qwen-Drive-1.0 | arXiv 2026, Qwen Team + HUST | [notes/qwen-drive.md](notes/qwen-drive.md) | Released & runnable (QwenLM/Qwen-Drive-1.0) |
+| 12 | DriveZero | arXiv 2026, Xiaomi EV | [notes/drivezero.md](notes/drivezero.md) | Not released (tech report) |
+| 13 | Drive-JEPA | arXiv 2026 (2601.22032) | [notes/drive-jepa.md](notes/drive-jepa.md) | Pending release (V-JEPA base: facebookresearch/jepa) |
+| 14 | SparseDriveV2 | arXiv 2026 (2603.29163), ECCV 2026 | [notes/sparsedrivev2.md](notes/sparsedrivev2.md) | Released with weights (swc-17/SparseDriveV2) |
 
 ## 结构
 
