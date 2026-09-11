@@ -58,7 +58,13 @@ EMMA 原文(附录 A.5):
 
 融合的真正目的:摄像头说"可能是行人",LiDAR 给出精确距离和轮廓验证;LiDAR 说"前方20米有物体",摄像头判断是路障还是猫,决定要不要急刹。任一传感器失效时,系统还有别的证据源兜底——这是加传感器的根本动机。
 
-**DriveMLM 的案例说明融合方式本身很关键**:它让 LiDAR 编码器通过余弦相似度去逼近对应图像的 CLIP 特征——本质是让 LiDAR 表征"模仿"摄像头表征。这个设计思路可能正好把 LiDAR 最独特的优势(精确几何)磨平了,这或许是它消融实验没提升的原因(**这是我的推断,非论文原文结论**)。ARTEMIS 的做法不同——直接把两种模态投影进同一个 BEV 特征空间共同处理,不强迫一种模态模仿另一种,是更常见也通常更有效的融合思路。
+**融合方式本身很关键,读过的论文里至少有三种不同做法:**
+
+| 论文 | 融合方式 | 效果 |
+|---|---|---|
+| DriveMLM | 训练 LiDAR 编码器(SST)通过余弦相似度去逼近对应图像的 CLIP 特征——本质是让 LiDAR 表征"模仿"摄像头表征 | 消融实验几乎无提升(74.99% vs 75.23%),这个设计思路可能正好把 LiDAR 最独特的优势(精确几何)磨平了(**这是我的推断,非论文原文结论**) |
+| ARTEMIS | 直接把两种模态投影进同一个 BEV 特征空间共同处理(TransFuser 式),不强迫一种模态模仿另一种 | 是感知模块的核心设计,效果良好,是更常见也通常更有效的融合思路 |
+| Autoware(2015) | **外参反投影(reprojection)**:用相机-LiDAR 标定好的外参矩阵,把 3D 点云直接投影到相机图像上(给图像加深度信息、缩小检测搜索范围),反过来把图像检测结果投影回 3D 点云坐标 | 最经典、最"硬编码几何"的融合方式,不靠神经网络学习对齐,而是用物理安装位置关系做数学投影——最可靠、最好理解,但也最不"智能"。原文:"We can then project the 3D point-cloud information obtained by the 3D Lidar sensor onto the image captured by the camera...The result of object detection on the image can also be reprojected onto the 3D point-cloud coordinates using the same extrinsic parameters." |
 
 ---
 

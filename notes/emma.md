@@ -48,6 +48,16 @@
 
 **③ Generalizability(不是正式任务,是观察到的能力)。** 第 3.6 节用可视化例子展示模型能应对没有专门训练过的稀有场景(比如没见过某种动物也能识别出是需要避让的障碍物),论文将这归因于 Gemini 预训练带来的通用常识迁移。
 
+### 2.5 这三件事,其他论文做不做?——完整跨论文对比
+
+**规划 + CoT 推理这条线,能排出一条演化线索。** DriveVLM(CoRL 2024,略早于 EMMA)几乎是同一思路的先声:三段式 CoT(场景描述→场景分析→分层规划)。Alpamayo-R1(NVIDIA)更进一步,而且是直接针对 EMMA/DriveVLM 这类"自由格式 CoT"提出批评的——原文说前作推理"vague, superficial, or causally confused",然后提出结构化因果推理链(先 CoT Reasoning→再 Meta-Actions→最后轨迹 token,顺序强制)。CoWorld-VLA 是反例——它论证文本 CoT 保留不了连续时空结构,改用"Latent CoT"(隐向量 token,非语言)。ARTEMIS、WAM-Diff、SparseDriveV2 没有用这种"先推理文字再出轨迹"的两阶段结构。
+
+**感知统一进一个生成式模型联合训练,这个具体做法在读过的论文里不常见。** Qwen-Drive-1.0 最接近,但机制不同:EMMA 是"都训"(检测、道路图都变成文本生成任务共训),Qwen-Drive-1.0 是"都不用专门训"(论证 VLM 表征已隐含足够 3D 理解,直接 probe 读出就够)。DriveVLM 不做这件事——3D 感知靠外部模块(DriveVLM-Dual 配的传统感知系统),不是同一模型联合训出来的。DriveZero、SparseDriveV2、ARTEMIS、WAM-Diff 笔记里没有找到这个具体设计的证据,不确定是否也这样做。
+
+**长尾推理,是读过的论文里出现频率最高的共同关切,不是 EMMA 独有。** DriveVLM 的核心出发点就是长尾场景理解,专门用 CLIP 做语言检索去挖稀有场景建自己的 SUP-AD benchmark。Alpamayo-R1 开篇第一句就点名"长尾、安全关键场景":"performance remains brittle in safety-critical long-tail scenarios where supervision is sparse and causal understanding is limited."。Qwen-Drive-1.0 也明确把长尾(路上倒树、动物横穿)列为纯 BEV 模型的缺陷。Drive-JEPA 提到长尾,但是以质疑/局限的角度(伪教师轨迹的 k-means 码本只有 8192 条,是否覆盖得了长尾是它自己没解决的开放问题),不是正面解决方案。ARTEMIS、WAM-Diff、CoWorld-VLA、SparseDriveV2、WA-JEPA 笔记里没有专门讨论长尾,不代表它们不管这个问题,只是不是论文重点论证对象。
+
+一句话总结:EMMA 三个任务里,①(CoT+轨迹)和③(长尾)是这批论文反复出现的共同母题,DriveVLM/Alpamayo-R1/Qwen-Drive-1.0 都在用不同方式回应同一个关切;②(检测+道路图+场景理解联合共训进一个生成式模型)相对独特,目前读过的论文里只有 Qwen-Drive-1.0 在做类似(但机制不同)的事。
+
 ### 3. 最大难点在哪里
 
 不在把各任务表述成文本生成这个想法本身(这个想法本身在 DriveGPT4、DriveLM 这批前作里已经出现过),难点在于**怎么让规划、感知、问答这几个形式和难度都不同的任务在同一个模型里联合训练还能互相促进,而不是互相干扰**。论文用 CoT 消融(+6.7%)和感知任务的正向结果说明这个联合训练确实起作用,但没有详细拆解"为什么感知任务的梯度不会干扰规划任务"这个训练动态层面的问题——这是我读完全文后觉得论文论证不够深入的地方,值得存疑。
