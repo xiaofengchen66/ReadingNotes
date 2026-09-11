@@ -28,9 +28,17 @@
 | 13 | Drive-JEPA | arXiv 2026 (2601.22032) | [notes/drive-jepa.md](notes/drive-jepa.md) | Pending release (V-JEPA base: facebookresearch/jepa) |
 | 14 | SparseDriveV2 | arXiv 2026 (2603.29163), ECCV 2026 | [notes/sparsedrivev2.md](notes/sparsedrivev2.md) | Released with weights (swc-17/SparseDriveV2) |
 
+## Synthesis(跨论文综合分析)
+
+单篇论文精读之外,按需写的跨论文综合分析,一般是"按某篇综述/某个框架的结构,看后续论文怎么回应"这种写法。
+
+- [representation-synthesis-2026.md](representation-synthesis-2026.md) — 按 End-to-end AD Survey §4.2(表征设计/表征学习)的框架,把 WA-JEPA / Drive-JEPA / Qwen-Drive-1.0 / DriveZero / SparseDriveV2 分别映射进去,指出 §4.2(表征学习)和 §4.3(世界模型)的边界正在消失,并提出 5 个可推进的具体方向
+
 ## 结构
 
 ```text
 notes/          每篇论文的精读笔记 (.md)
 notes/img/      对应的英文总结海报 (.svg)
+glossary.md     跨论文术语表,按首次出现的论文标注
+*-synthesis-*.md  跨论文综合分析(见上)
 ```
