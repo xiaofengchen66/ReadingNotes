@@ -31,6 +31,7 @@
 | 16 | ARTEMIS | arXiv 2025 (2504.19580) | [notes/artemis.md](notes/artemis.md) | Genuine MoE (routed, input-dependent) |
 | 17 | WAM-Diff | arXiv 2026 (2512.11872) | [notes/wam-diff.md](notes/wam-diff.md) | Genuine MoE (routed, input-dependent), single-image only |
 | 18 | CoWorld-VLA | arXiv 2026 (2605.10426), Afari Intelligent Drive | [notes/coworld-vla.md](notes/coworld-vla.md) | **NOT true MoE** — 4 always-active branches fused via fixed global scalar weights, no gating/routing; released & runnable (AFARI-Research/CoWorld-VLA, 10★) |
+| 19 | EMMA | arXiv 2410.23262, Waymo | [notes/emma.md](notes/emma.md) | Not released (no code/weights found) |
 
 ## Synthesis(跨论文综合分析)
 
