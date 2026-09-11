@@ -27,6 +27,7 @@
 | 12 | DriveZero | arXiv 2026, Xiaomi EV | [notes/drivezero.md](notes/drivezero.md) | Not released (tech report) |
 | 13 | Drive-JEPA | arXiv 2026 (2601.22032) | [notes/drive-jepa.md](notes/drive-jepa.md) | Pending release (V-JEPA base: facebookresearch/jepa) |
 | 14 | SparseDriveV2 | arXiv 2026 (2603.29163), ECCV 2026 | [notes/sparsedrivev2.md](notes/sparsedrivev2.md) | Released with weights (swc-17/SparseDriveV2) |
+| 15 | NAVSIM | NeurIPS 2024 (2406.15349) | [notes/navsim.md](notes/navsim.md) | Released, actively maintained (autonomousvision/navsim, 1.1k★) — source of PDMS/EPDMS used across most of the papers above |
 
 ## Synthesis(跨论文综合分析)
 
