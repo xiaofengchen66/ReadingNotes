@@ -37,6 +37,7 @@
 单篇论文精读之外,按需写的跨论文综合分析,一般是"按某篇综述/某个框架的结构,看后续论文怎么回应"这种写法。
 
 - [representation-synthesis-2026.md](representation-synthesis-2026.md) — 按 End-to-end AD Survey §4.2(表征设计/表征学习)的框架,把 WA-JEPA / Drive-JEPA / Qwen-Drive-1.0 / DriveZero / SparseDriveV2 分别映射进去,指出 §4.2(表征学习)和 §4.3(世界模型)的边界正在消失,并提出 5 个可推进的具体方向
+- [sensor-fusion-qa.md](sensor-fusion-qa.md) — 由 EMMA(Waymo)附录局限性段落引出的跨论文 Q&A:摄像头/LiDAR/雷达各自优劣、"融合"的真正目的(不是数据标准化)、为什么 VLM 驱动的模型普遍选纯视觉、传统融合 vs 接入大模型的融合成熟度差异、LiDAR 点云数据格式详解
 
 ## 结构
 
