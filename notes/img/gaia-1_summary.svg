@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 900" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1700" height="900" fill="#ffffff"/>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="1700" height="72" fill="#14326b"/>
+  <text x="850" y="34" text-anchor="middle" fill="#ffffff" font-size="26" font-weight="bold">GAIA-1: A Generative World Model for Autonomous Driving</text>
+  <text x="850" y="58" text-anchor="middle" fill="#cfe0ff" font-size="15">Wayve(UK)· arXiv 2309.17080 · "world modeling = next-token prediction, just like an LLM"</text>
+
+  <!-- Warning band -->
+  <rect x="0" y="72" width="1700" height="48" fill="#fff3cd"/>
+  <text x="30" y="101" fill="#7a5b00" font-size="17" font-weight="bold">⚠ GAIA is from Wayve (UK), NOT Waymo (US/Alphabet) — a common name confusion worth clarifying up front</text>
+
+  <!-- Panel A: Three-stage architecture -->
+  <text x="30" y="160" fill="#111827" font-size="19" font-weight="bold">Three Independently-Trained Components → Chained at Inference</text>
+
+  <g font-size="14">
+    <!-- Tokenizer -->
+    <rect x="30" y="185" width="330" height="150" rx="10" fill="#eef4ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="195" y="215" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e3a8a">Image Tokenizer</text>
+    <text x="195" y="236" text-anchor="middle" font-size="13" fill="#1e3a8a">0.3B params</text>
+    <text x="195" y="260" text-anchor="middle" font-size="12.5">Discrete autoencoder</text>
+    <text x="195" y="278" text-anchor="middle" font-size="12.5">DINO-distillation loss</text>
+    <text x="195" y="296" text-anchor="middle" font-size="12.5">576 tokens / frame</text>
+    <text x="195" y="314" text-anchor="middle" font-size="12.5">vocab size K = 8192</text>
+
+    <path d="M 360 260 L 405 260" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+    <!-- World Model -->
+    <rect x="405" y="185" width="330" height="150" rx="10" fill="#fff0e6" stroke="#c2410c" stroke-width="2"/>
+    <text x="570" y="215" text-anchor="middle" font-size="16" font-weight="bold" fill="#9a3412">World Model</text>
+    <text x="570" y="236" text-anchor="middle" font-size="13" fill="#9a3412">6.5B params</text>
+    <text x="570" y="260" text-anchor="middle" font-size="12.5">Autoregressive transformer</text>
+    <text x="570" y="278" text-anchor="middle" font-size="12.5">predicts next image token</text>
+    <text x="570" y="296" text-anchor="middle" font-size="12.5">causal masking</text>
+    <text x="570" y="314" text-anchor="middle" font-size="12.5">26 frames @ 6.25 Hz</text>
+
+    <path d="M 735 260 L 780 260" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+    <!-- Video Decoder -->
+    <rect x="780" y="185" width="330" height="150" rx="10" fill="#eafaf0" stroke="#15803d" stroke-width="2"/>
+    <text x="945" y="215" text-anchor="middle" font-size="16" font-weight="bold" fill="#14532d">Video Decoder</text>
+    <text x="945" y="236" text-anchor="middle" font-size="13" fill="#14532d">2.6B params</text>
+    <text x="945" y="260" text-anchor="middle" font-size="12.5">3D U-Net diffusion</text>
+    <text x="945" y="278" text-anchor="middle" font-size="12.5">temporal upsampling</text>
+    <text x="945" y="296" text-anchor="middle" font-size="12.5">frame interpolation</text>
+    <text x="945" y="314" text-anchor="middle" font-size="12.5">6.25 Hz → 25 Hz</text>
+
+    <path d="M 1110 260 L 1155 260" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+    <!-- Output -->
+    <rect x="1155" y="210" width="220" height="100" rx="10" fill="#f3f4f6" stroke="#4b5563" stroke-width="2"/>
+    <text x="1265" y="245" text-anchor="middle" font-size="14" font-weight="bold">Realistic driving</text>
+    <text x="1265" y="265" text-anchor="middle" font-size="14" font-weight="bold">video rollout</text>
+    <text x="1265" y="288" text-anchor="middle" font-size="12" fill="#4b5563">(text / action conditioned)</text>
+  </g>
+
+  <text x="30" y="365" font-size="13.5" fill="#374151">Input tokens interleaved as text (T5-large, 32 tok/step) · image (576 tok/frame) · action (speed, curvature) — factorized spatio-temporal positional embeddings.</text>
+
+  <!-- Panel B: Training scale table -->
+  <text x="30" y="420" fill="#111827" font-size="19" font-weight="bold">Training Scale (verified from paper)</text>
+
+  <g font-size="13.5">
+    <rect x="30" y="440" width="1300" height="40" fill="#1e3a8a"/>
+    <text x="50" y="466" fill="#ffffff" font-weight="bold">Component</text>
+    <text x="330" y="466" fill="#ffffff" font-weight="bold">Params</text>
+    <text x="480" y="466" fill="#ffffff" font-weight="bold">Steps</text>
+    <text x="640" y="466" fill="#ffffff" font-weight="bold">Days</text>
+    <text x="780" y="466" fill="#ffffff" font-weight="bold">Hardware</text>
+    <text x="1060" y="466" fill="#ffffff" font-weight="bold">Batch size</text>
+
+    <rect x="30" y="480" width="1300" height="42" fill="#eef4ff"/>
+    <text x="50" y="506">Image Tokenizer</text><text x="330" y="506">0.3B</text><text x="480" y="506">200k</text><text x="640" y="506">4</text><text x="780" y="506">32×A100 80GB</text><text x="1060" y="506">160</text>
+
+    <rect x="30" y="522" width="1300" height="42" fill="#fff0e6"/>
+    <text x="50" y="548">World Model</text><text x="330" y="548">6.5B</text><text x="480" y="548">100k</text><text x="640" y="548">15</text><text x="780" y="548">64×A100 80GB</text><text x="1060" y="548">128</text>
+
+    <rect x="30" y="564" width="1300" height="42" fill="#eafaf0"/>
+    <text x="50" y="590">Video Decoder</text><text x="330" y="590">2.6B</text><text x="480" y="590">300k</text><text x="640" y="590">15</text><text x="780" y="590">32×A100 80GB</text><text x="1060" y="590">64</text>
+
+    <rect x="30" y="440" width="1300" height="166" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+  </g>
+
+  <text x="30" y="645" font-size="13.5" fill="#374151">Dataset: 4,700 hours (≈420M images) of London driving data, 2019–2023, balanced across latitude/longitude/weather/behavior. Not released.</text>
+
+  <!-- Panel C: emergent capabilities -->
+  <text x="30" y="695" fill="#111827" font-size="19" font-weight="bold">Emergent Capabilities Shown (qualitative, §4)</text>
+  <g font-size="13.5" fill="#1f2937">
+    <text x="50" y="725">① Minutes-long coherent "imagined" rollouts</text>
+    <text x="50" y="750">② Multimodal futures from one context (several plausible continuations)</text>
+    <text x="50" y="775">③ Fine-grained ego speed/curvature control</text>
+    <text x="680" y="725">④ Emergent 3D geometry (pitch/roll from road bumps)</text>
+    <text x="680" y="750">⑤ Extrapolation beyond training distribution (never-seen off-road steering)</text>
+    <text x="680" y="775">⑥ Reactive agents (other cars respond to ego actions)</text>
+  </g>
+
+  <!-- Footer -->
+  <rect x="0" y="815" width="1700" height="65" fill="#eef2ff"/>
+  <text x="850" y="845" text-anchor="middle" font-size="15" fill="#1e3a8a">Scaling-law power-fit (validated with models 10,000× smaller) shows the LLM-style "more data/compute → better" curve also holds for driving video generation —</text>
+  <text x="850" y="866" text-anchor="middle" font-size="15" fill="#1e3a8a">but self-stated limitation: generation "does not yet run at real-time." This gap is what GAIA-2 (consistency) and NVIDIA's OmniDreams (real-time) each push on next.</text>
+
+  <defs>
+    <marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151"/>
+    </marker>
+  </defs>
+</svg>

@@ -34,6 +34,8 @@
 | 19 | EMMA | arXiv 2410.23262, Waymo | [notes/emma.md](notes/emma.md) | Not released (no code/weights found) |
 | 20 | Senna | arXiv 2410.22313, HUST + Horizon Robotics | [notes/senna.md](notes/senna.md) | Released & runnable (hustvl/Senna) |
 | 21 | OmniDreams | arXiv 2606.03159, NVIDIA | [notes/omnidreams.md](notes/omnidreams.md) | Released, verified real (nv-tlabs/omni-dreams, 344★, CC BY 4.0) |
+| 22 | GAIA-1 | arXiv 2309.17080, 2023, Wayve(UK) | [notes/gaia-1.md](notes/gaia-1.md) | Not released (tech report only) — **note: Wayve, not Waymo** |
+| 23 | GAIA-2 | arXiv 2503.20523, 2025, Wayve(UK) | [notes/gaia-2.md](notes/gaia-2.md) | Not released (tech report only) |
 
 ## Synthesis(跨论文综合分析)
 
