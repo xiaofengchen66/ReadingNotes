@@ -2,7 +2,7 @@
 
 - **Venue / year:** arXiv 2603.08113v1, 2026-03-09
 - **Authors:** Zihan You, Hongwei Liu, Chenxu Dang, Zhe Wang, Sining Ang, Aoqi Wang, Yan Wang(通讯作者) — 清华大学 AIR(人工智能产业研究院)主导，合作单位包括东南大学、华中科技大学、中国科学技术大学、北京科技大学
-- **Link:** https://arxiv.org/abs/2603.08113
+- **Link:** https://arxiv.org/abs/2603.08113 ([本地PDF副本](pdf/samoe-vla.pdf))
 - **来源说明:** 用户先贴了摘要，后续又贴了全文(Introduction/Related Work/Method/Experiments/Conclusion/大部分参考文献)，并贴了自己和Gemini就架构图、SA-MoE融合图、pretrain/final stage区别做的问答。本笔记以用户贴的论文原文为准，Gemini的图解读里有一处需要修正(见下方"⚠ 一处需要修正的说法")。
 - **Code:** 论文写"Our code will be released soon"，截至本笔记整理时**未开源**
 - **Input / 输入:** 人类指令(语言)+多视角摄像头图像(编码成BEV特征)+自车状态(ego-state)token+带噪声的动作token
