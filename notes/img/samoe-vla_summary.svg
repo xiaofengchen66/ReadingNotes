@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1100" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1700" height="1100" fill="#ffffff"/>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="1700" height="72" fill="#14326b"/>
+  <text x="850" y="34" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="bold">SAMoE-VLA: Scene-Adaptive MoE for Autonomous Driving</text>
+  <text x="850" y="58" text-anchor="middle" fill="#cfe0ff" font-size="14">Tsinghua AIR · arXiv 2603.08113 · "token-level MoE doesn't fit scene-level driving decisions"</text>
+
+  <!-- Panel A: two-expert architecture -->
+  <text x="30" y="110" fill="#111827" font-size="19" font-weight="bold">Two Experts, Unified by CMCA</text>
+
+  <g font-size="13">
+    <rect x="30" y="130" width="560" height="150" rx="10" fill="#eef4ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="310" y="160" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e3a8a">World-Language Expert</text>
+    <text x="310" y="185" text-anchor="middle" font-size="12.5">Language instruction tokens + BEV tokens</text>
+    <text x="310" y="205" text-anchor="middle" font-size="12.5">+ soft prompts for "world" embeddings</text>
+    <text x="310" y="228" text-anchor="middle" font-size="12.5" fill="#1e3a8a" font-weight="bold">Pretrain loss includes point-cloud</text>
+    <text x="310" y="246" text-anchor="middle" font-size="12.5" fill="#1e3a8a" font-weight="bold">reconstruction — genuinely predicts the future</text>
+    <text x="310" y="268" text-anchor="middle" font-size="11.5" fill="#555">Not just a VLM with a "World" label</text>
+
+    <path d="M 620 205 L 665 205" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+    <text x="642" y="195" text-anchor="middle" font-size="11" fill="#555">CMCA</text>
+
+    <rect x="665" y="130" width="560" height="150" rx="10" fill="#fff0e6" stroke="#c2410c" stroke-width="2"/>
+    <text x="945" y="160" text-anchor="middle" font-size="15" font-weight="bold" fill="#9a3412">Planning Expert</text>
+    <text x="945" y="185" text-anchor="middle" font-size="12.5">Ego-state tokens + noisy action tokens</text>
+    <text x="945" y="205" text-anchor="middle" font-size="12.5">Internal layers use SA-MoE (not plain FFN)</text>
+    <text x="945" y="228" text-anchor="middle" font-size="12.5" fill="#9a3412" font-weight="bold">Generates trajectory via flow matching</text>
+    <text x="945" y="250" text-anchor="middle" font-size="11.5" fill="#555">Output: (x1,y1), (x2,y2), (x3,y3)...</text>
+
+    <rect x="1255" y="130" width="420" height="150" rx="10" fill="#f3f4f6" stroke="#4b5563" stroke-width="2"/>
+    <text x="1465" y="160" text-anchor="middle" font-size="15" font-weight="bold">CMCA</text>
+    <text x="1465" y="185" text-anchor="middle" font-size="12">Conditional Cross-Modal</text>
+    <text x="1465" y="203" text-anchor="middle" font-size="12">Causal Attention</text>
+    <text x="1465" y="228" text-anchor="middle" font-size="11.5" fill="#555">Condition tokens (BEV/world/</text>
+    <text x="1465" y="245" text-anchor="middle" font-size="11.5" fill="#555">language/state): static, always visible</text>
+    <text x="1465" y="262" text-anchor="middle" font-size="11.5" fill="#555">Action tokens: causal, see only the past</text>
+  </g>
+
+  <!-- Panel B: SA-MoE mechanism -->
+  <text x="30" y="330" fill="#111827" font-size="19" font-weight="bold">SA-MoE: Merge Expert PARAMETERS, Not Outputs</text>
+
+  <g font-size="13">
+    <rect x="30" y="350" width="330" height="150" rx="10" fill="#eafaf0" stroke="#15803d" stroke-width="2"/>
+    <text x="195" y="378" text-anchor="middle" font-size="14" font-weight="bold" fill="#14532d">1. DSE on BEV</text>
+    <text x="195" y="402" text-anchor="middle" font-size="12">Distance-guided deformable conv</text>
+    <text x="195" y="420" text-anchor="middle" font-size="12">(denser sampling near ego vehicle)</text>
+    <text x="195" y="442" text-anchor="middle" font-size="12">→ cross-attn → H_BEV</text>
+    <text x="195" y="464" text-anchor="middle" font-size="11.5" fill="#555">computed ONCE, reused every layer</text>
+    <text x="195" y="483" text-anchor="middle" font-size="11.5" fill="#555">(cheap — "lightweight")</text>
+
+    <path d="M 365 425 L 410 425" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+    <rect x="410" y="350" width="330" height="150" rx="10" fill="#fdf2f8" stroke="#be185d" stroke-width="2"/>
+    <text x="575" y="378" text-anchor="middle" font-size="14" font-weight="bold" fill="#9d174d">2. Routing Weights</text>
+    <text x="575" y="402" text-anchor="middle" font-size="12">H_BEV → mean-pool → linear → softmax</text>
+    <text x="575" y="424" text-anchor="middle" font-size="12" font-family="monospace">π = [0.2, 0.1, 0.4, 0.3]</text>
+    <text x="575" y="448" text-anchor="middle" font-size="11.5" fill="#555">EACH MoE layer has its own linear head</text>
+    <text x="575" y="465" text-anchor="middle" font-size="11.5" fill="#555">→ expert mix can differ layer to layer</text>
+
+    <path d="M 745 425 L 790 425" stroke="#374151" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+    <rect x="790" y="350" width="400" height="150" rx="10" fill="#eef4ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="990" y="378" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e3a8a">3. Merge PARAMETERS</text>
+    <text x="990" y="402" text-anchor="middle" font-size="13" font-family="monospace">W_merged = Σ π_e · W^(e)</text>
+    <text x="990" y="426" text-anchor="middle" font-size="12">Output = FFN(H_plan ; W_merged)</text>
+    <text x="990" y="450" text-anchor="middle" font-size="11.5" fill="#b91c1c" font-weight="bold">NOT the same as running each expert</text>
+    <text x="990" y="467" text-anchor="middle" font-size="11.5" fill="#b91c1c" font-weight="bold">separately and averaging the outputs</text>
+
+    <rect x="1225" y="350" width="450" height="150" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+    <text x="1450" y="378" text-anchor="middle" font-size="14" font-weight="bold" fill="#9a3412">Deformable Conv Intuition</text>
+    <text x="1450" y="402" text-anchor="middle" font-size="12">Fixed conv: samples near &amp; far</text>
+    <text x="1450" y="420" text-anchor="middle" font-size="12">regions with equal density</text>
+    <text x="1450" y="442" text-anchor="middle" font-size="12">M_near(i,j) = 1 − dist/dist_max</text>
+    <text x="1450" y="464" text-anchor="middle" font-size="11.5" fill="#555">offsets learned, start at zero (identity conv)</text>
+  </g>
+
+  <!-- Panel C: key ablation evidence -->
+  <text x="30" y="550" fill="#111827" font-size="19" font-weight="bold">The Smoking-Gun Ablation (nuScenes open-loop)</text>
+
+  <g font-size="13">
+    <rect x="30" y="570" width="1640" height="42" fill="#1e3a8a"/>
+    <text x="50" y="596" fill="#ffffff" font-weight="bold">MoE Design</text>
+    <text x="700" y="596" fill="#ffffff" font-weight="bold">L2 Error (m)</text>
+    <text x="1000" y="596" fill="#ffffff" font-weight="bold">Collision Rate</text>
+    <text x="1300" y="596" fill="#ffffff" font-weight="bold">Verdict</text>
+
+    <rect x="30" y="612" width="1640" height="40" fill="#f3f4f6"/>
+    <text x="50" y="637">Dense (no MoE)</text><text x="700" y="637">0.32</text><text x="1000" y="637">0.25%</text><text x="1300" y="637">baseline</text>
+
+    <rect x="30" y="652" width="1640" height="40" fill="#ffffff"/>
+    <text x="50" y="677">Token-level hard routing (DriveMoE/WAM-Diff-style)</text><text x="700" y="677">0.30</text><text x="1000" y="677" fill="#b91c1c" font-weight="bold">+38.4% worse</text><text x="1300" y="677" fill="#b91c1c">unsafe</text>
+
+    <rect x="30" y="692" width="1640" height="40" fill="#f3f4f6"/>
+    <text x="50" y="717">Token-level soft routing (SoftMoE-style)</text><text x="700" y="717">0.46</text><text x="1000" y="717">0.57%</text><text x="1300" y="717" fill="#b91c1c">worse on both</text>
+
+    <rect x="30" y="732" width="1640" height="40" fill="#ffffff"/>
+    <text x="50" y="757">Token-level hard + scene bias added</text><text x="700" y="757">0.57</text><text x="1000" y="757">0.69%</text><text x="1300" y="757" fill="#b91c1c">patching doesn't work</text>
+
+    <rect x="30" y="772" width="1640" height="40" fill="#f3f4f6"/>
+    <text x="50" y="797">Token-level soft + scene bias added</text><text x="700" y="797">~same</text><text x="1000" y="797">0.34%</text><text x="1300" y="797" fill="#b91c1c">still worse</text>
+
+    <rect x="30" y="812" width="1640" height="42" fill="#d1fae5"/>
+    <text x="50" y="838" font-weight="bold">SA-MoE (scene-level, parameter merge — ours)</text><text x="700" y="838" font-weight="bold">0.29</text><text x="1000" y="838" font-weight="bold">0.26%</text><text x="1300" y="838" font-weight="bold">best balance</text>
+
+    <rect x="30" y="570" width="1640" height="284" fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+  </g>
+  <text x="30" y="878" font-size="13.5" fill="#374151">Key finding: adding scene bias ON TOP of token-level routing does NOT fix the problem — only a full scene-level redesign works. This rules out "just a bit of context" as a patch.</text>
+
+  <!-- Footer -->
+  <rect x="0" y="930" width="1700" height="140" fill="#eef2ff"/>
+  <text x="850" y="962" text-anchor="middle" font-size="15" fill="#1e3a8a">SAMoE-VLA explicitly names and critiques DriveMoE ("Yang et al.") for using predefined router labels and</text>
+  <text x="850" y="984" text-anchor="middle" font-size="15" fill="#1e3a8a">camera-view-selecting routers, calling it a security vulnerability — this is a direct response, not independent work.</text>
+  <text x="850" y="1012" text-anchor="middle" font-size="15" fill="#1e3a8a" font-weight="bold">Result: 3.6B parameters beat multiple 7B VLA baselines on both nuScenes (open-loop) and LangAuto (closed-loop).</text>
+  <text x="850" y="1038" text-anchor="middle" font-size="13" fill="#555">Code not yet released as of this note.</text>
+
+  <defs>
+    <marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#374151"/>
+    </marker>
+  </defs>
+</svg>

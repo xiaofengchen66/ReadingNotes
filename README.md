@@ -36,6 +36,7 @@
 | 21 | OmniDreams | arXiv 2606.03159, NVIDIA | [notes/omnidreams.md](notes/omnidreams.md) | Released, verified real (nv-tlabs/omni-dreams, 344★, CC BY 4.0) |
 | 22 | GAIA-1 | arXiv 2309.17080, 2023, Wayve(UK) | [notes/gaia-1.md](notes/gaia-1.md) | Not released (tech report only) — **note: Wayve, not Waymo** |
 | 23 | GAIA-2 | arXiv 2503.20523, 2025, Wayve(UK) | [notes/gaia-2.md](notes/gaia-2.md) | Not released (tech report only) |
+| 24 | SAMoE-VLA | arXiv 2603.08113, 2026, Tsinghua AIR | [notes/samoe-vla.md](notes/samoe-vla.md) | Not released ("code will be released soon") — scene-level MoE, explicitly critiques DriveMoE's token-level design |
 
 ## Synthesis(跨论文综合分析)
 
