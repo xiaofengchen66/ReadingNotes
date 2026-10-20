@@ -90,6 +90,35 @@
 
 ---
 
+## 消融实验(Table A1 / Table 3 / Table A2 / A4 / A5)
+
+### 1. 专家槽位是否真的各管各的(Table A1 + Figure 4b)
+
+两种独立验证互相印证专家分工是真实的，不是摆设：
+
+- **推理时token-removal诊断：** 直接在推理时挖掉某个专家token，看哪个子指标掉得最多——挖[GEO]主要伤道路几何，挖[SEM]主要伤安全，挖[DYN]主要伤进度(progress)和长时舒适性(extended comfort)。Figure 4(b)把这个画成各专家的"伤害剖面图"，每个专家被挖掉后主要伤自己那块。
+- **更强的验证：重新训练(不只是推理时挖掉)：** 直接不用动态教师V-JEPA 2重新训练Perception Provider(并重新优化WAM)，EPDMS掉到88.6，掉分依然集中在EP(Ego Progress?)和EC(Extended Comfort)两个子指标——这一步排除了"推理时挖token掉分只是因为模型没见过缺输入"的可能(input-distribution artifact)，证明[DYN]专家的贡献是**因果性的**，不是巧合。
+
+### 2. 整条pipeline是否层层有效、增益来自哪里(Table 3 + A4 + A5)
+
+- **嵌套式(nested)消融：** 按构建顺序逐步加入future conditioning → metric-aware supervision → per-branch prior retention → metric-distilled routing(简称MR)，性能**单调递增**，全部加上效果最好，在两套评测协议下都成立。不加MR时三个专家分支保持均匀加权(uniform gating)。
+- **鲁棒性：** 三个训练随机种子下，提升的顺序都保持一致(evaluation-seed std ≤0.05，Table A4)，不是随机波动。
+- **EC(长时舒适性)指标的增益来源定位：** EC是"跨已发表系统里最不稳定的子指标"，但在这里——**大部分EC提升来自future conditioning这一步**(78.9→84.0)，剩下一小部分才来自dynamic-prior通路和路由机制。
+- **机制增益 vs. provider强弱是否纠缠(Table A5)：** 给一个弱的provider(只做QA微调、没蒸馏)加上prior retention+metric-distilled routing，提升+1.8 EPDMS；给完整蒸馏过的provider加同样机制，提升+3.1 EPDMS——说明这两个机制不是"provider强才显灵"的伪增益，但provider越强、这两个机制能撬动的收益确实越大(协同效应)。
+
+### 3. 具体设计选择是否都必要(Table A2)
+
+- 把future-conditioning投影换成标准初始化、改成单阶段训练、堵住metric分支经过`st`的梯度——**三者都会让两个指标同时变差**，验证了论文自己选的初始化方式、分阶段训练、特定梯度路径都不是随意选择(对应Appendix C的"预期梯度路径")。
+- **路由/融合方式的分层对比(最关键的一组对照)：**
+  - **轨迹层面平均**(每个专家各自生成一条轨迹，最后把轨迹平均)——**掉分最多**(88.5 PDMS)，说明融合必须发生在"条件/特征空间"，不能等到轨迹生成完再平均。
+  - **静态可学习权重** vs **完全均匀权重(uniform gating)**——**几乎没区别**(89.7 vs 89.8 PDMS)，说明"权重是可学的"这件事本身不是增益来源，不随场景动态变化就等于没用。
+  - **端到端训练路由器(不用metric蒸馏信号单独监督)**——仍接近均匀水平(90.0 PDMS)，离完整版有明显差距——**真正的增益主要来自用privileged metric distillation信号专门监督路由器，不是单纯端到端梯度能学出来的**。
+  - **只用导航指令(左转/右转)当路由条件**——89.0 EPDMS，比完整版低1.2分，说明光看指令不够，还得看场景本身的特征。
+
+**这组消融的核心论证逻辑：** 路由"是不是可学习的"不重要，路由"是不是按场景动态变化的、且是不是用了metric蒸馏信号专门监督"才是真正的增益来源——这和SAMoE-VLA消融实验证明"给token级路由加场景偏置不够、必须整体换成scene级"是同一种论证模式(单纯打补丁不够，必须是机制本身对了)。
+
+---
+
 ## 关键术语解析
 
 **Retention anchor(保留锚点)**
@@ -126,7 +155,7 @@
 - [x] "frozen perception foundation model"具体是什么模型——已确认是**微调+蒸馏后冻结的InternVL3**，不是一个驾驶专用MoE模型，蒸馏来源是VGGT(几何)/V-JEPA 2(动态)/Wan 2.1(语义)三个教师模型，和SAMoE-VLA/DriveMoE这类驾驶专用MoE模型没有重叠，撞车风险较低
 - [ ] Retention anchor具体的损失函数形式(目前只知道机制意图，没看到具体公式)
 - [ ] Router/Future Head/Action Head各自的具体网络结构和作用
-- [ ] 消融实验：去掉retention anchor / 去掉scene-conditioned router分别掉多少点
+- [x] 消融实验数字——已补充，见上方"消融实验"一节(Table A1/3/A2/A4/A5)
 - [ ] 完整架构图(目前没有图，无法画SVG海报)
 - [ ] 跟SAMoE-VLA的正面对比(如果论文里有引用或对比表格)
 - [ ] 代码开源情况复核
