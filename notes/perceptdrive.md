@@ -4,9 +4,9 @@
 - **Authors:** Yushan Liu, Tianxiong Lv, Bohua Wang, Hangqi Fan, Chenxu Zhao, He Zheng, Xuchang Zhong, Yifan Xie, Congyang Zhao, Zhihao Liao, Leigang Luo, Yang Cai, Xiao-Ping Zhang, Wenbo Ding — 清华大学深圳国际研究生院(Tsinghua SIGS)主导
 - **Link:** https://arxiv.org/abs/2607.20175
 - **Code:** 未查到开源仓库，暂按未开源处理
-- **Input / 输入:** 多视角摄像头图像 → BEV/感知特征；冻结的感知基础模型(frozen perception foundation models)输出 + 冻结的自监督视频编码器(frozen self-supervised video encoder)输出，作为"专家先验"(expert priors)
+- **Input / 输入:** 多视角摄像头图像(喂给冻结的Perception Provider即微调+蒸馏后的InternVL3，产出专家特征`H_t`) + 视频流(喂给冻结的自监督视频编码器，产出`F_t`) + 自车状态(ego state：车速、航向角) + 导航指令(command：左转/右转等)
 - **Output / 输出:** 单条确定性规划轨迹(one trajectory)，推理时不做候选轨迹打分/重排(without test-time scoring or reranking)
-- **阅读进度说明：** 本笔记目前只覆盖了用户读到的Related Work片段(对三类既有做法的批判(a)(b)(c)、PerceptDrive方案总结句、Latent World-Action Models综述段落)，**还没有读到Method/Experiments具体细节、消融数字、完整架构图**。TL;DR和术语解析部分已尽量结合之前搜索验证过的摘要信息(NAVSIM结果等)，但方法细节、公式、消融表格等需要后续读到对应章节再补充，补充前不要当成已验证的完整论点使用。
+- **阅读进度说明：** 本笔记已覆盖Related Work片段(三类既有做法批判(a)(b)(c)、PerceptDrive方案总结句、Latent World-Action Models综述段落)和Method里"两阶段训练+两套骨干网络"的核心结构，**还没有读到Router/Future Head/Action Head的具体机制、完整损失函数、消融数字、完整架构图**。TL;DR部分已尽量结合之前搜索验证过的摘要信息(NAVSIM结果等)，但消融表格等需要后续读到对应章节再补充，补充前不要当成已验证的完整论点使用。
 
 ---
 
@@ -60,6 +60,36 @@
 
 ---
 
+## 两阶段训练与两套骨干网络(容易混淆，务必分清)
+
+系统里有**两个完全不同的骨干网络**，所处阶段、分工、参数状态都不一样，读Method时最容易搞混：
+
+### 1. Perception Provider(感知基座)——Stage 1训练出来，Stage 2冻结
+
+- **本体：** `InternVL3`(多模态大模型)，先经过Stage 1a微调。
+- **Stage 1b怎么教：** 用三个现成的教师模型——**VGGT、V-JEPA 2、Wan 2.1**——把几何(geometric)/语义(semantic)/动态(dynamic)三类知识分别蒸馏进InternVL3内部的3个"专家槽位"：`[GEO]`、`[SEM]`、`[DYN]`。这三个槽位对应的就是前面笔记里说的"expert priors(专家先验)"。
+- **教完之后：** **彻底冻结**，Stage 2里参数完全不更新，只当一个只读的"感知水龙头"(Perception Provider)，负责产出专家特征`H_t`。
+
+### 2. World-Action Model Backbone Ψ(规划主干)——Stage 2里全新训练的部分
+
+- **本体：** 一个**全新构建的小型/轻量级网络**(通常是几层Transformer或Cross-Attention模块)，专门用于下游规划与时序交互，和Perception Provider不是同一个东西。
+- **输入：** Query Banks从两个冻结源(Perception Provider的`H_t`、冻结自监督视频编码器的`F_t`)里"读出并压缩"的特征向量，再加上自车状态(ego state：车速、航向角)和导航指令(command：左转/右转)。
+- **职责：** 把以上信息融合起来，交给后面的Router(路由器)、Future Head(未来头)、Action Head(轨迹头)去处理。
+- **状态：** **全参数可训练**，Stage 2专门为开车规划任务优化。
+
+### 对照表
+
+| 属性 | Perception Provider | WAM Backbone Ψ |
+|---|---|---|
+| 本质实体 | 大尺寸多模态大模型(InternVL3) | 下游专用的规划融合网络 |
+| 主要任务 | 看懂图像，产出高维专家特征`H_t` | 融合感知特征+自车状态+导航指令，驱动决策 |
+| Stage 2状态 | **完全冻结**，不参与反向传播 | **完全可训**，实时更新权重 |
+| 训练方式 | Stage 1b：三个教师模型(VGGT/V-JEPA 2/Wan 2.1)蒸馏进`[GEO]/[SEM]/[DYN]`三个专家槽位 | Stage 2：端到端训练，优化规划任务 |
+
+**为什么容易搞混：** 两者都叫"backbone"/都跟"感知"有关，但一个是**被蒸馏、练完就封存不动**的知识容器，另一个是**专门负责把冻结知识用起来、持续在学**的调度和融合网络——对应回前面"per-branch retention anchor"和"scene-conditioned router"的分工：retention anchor保真的对象就是Perception Provider这边产出的`H_t`，scene-conditioned router则是WAM Backbone里负责按场景动态加权的那部分。
+
+---
+
 ## 关键术语解析
 
 **Retention anchor(保留锚点)**
@@ -92,12 +122,14 @@
 
 ## 待补充(读到对应章节后再写)
 
-- [ ] 完整Method章节：retention anchor具体的损失函数形式、router的具体网络结构
+- [x] 两阶段训练流程 + 两套骨干网络的区别(Perception Provider vs. WAM Backbone Ψ)——已补充，见上方章节
+- [x] "frozen perception foundation model"具体是什么模型——已确认是**微调+蒸馏后冻结的InternVL3**，不是一个驾驶专用MoE模型，蒸馏来源是VGGT(几何)/V-JEPA 2(动态)/Wan 2.1(语义)三个教师模型，和SAMoE-VLA/DriveMoE这类驾驶专用MoE模型没有重叠，撞车风险较低
+- [ ] Retention anchor具体的损失函数形式(目前只知道机制意图，没看到具体公式)
+- [ ] Router/Future Head/Action Head各自的具体网络结构和作用
 - [ ] 消融实验：去掉retention anchor / 去掉scene-conditioned router分别掉多少点
 - [ ] 完整架构图(目前没有图，无法画SVG海报)
 - [ ] 跟SAMoE-VLA的正面对比(如果论文里有引用或对比表格)
 - [ ] 代码开源情况复核
-- [ ] 跟10-15号已经记录在`samoe-vla.md`"相关工作排查"里的撞车风险点对照：PerceptDrive冻结的是通用感知基础模型，不是别的MoE驾驶模型本身——这一点需要读Method部分确认"frozen perception foundation model"具体指哪个模型(是通用视觉基础模型，还是已经在驾驶数据上训练过的专用模型)
 
 ---
 
@@ -112,3 +144,7 @@
 | Scene-conditioned router(场景条件路由器) | Related Work |
 | Action-free future latent(不含动作信息的未来隐特征) | Related Work |
 | Latent world-action modeling(隐空间世界-动作建模) | Related Work |
+| Perception Provider(感知基座，微调+蒸馏后冻结的InternVL3) | Method/Stage 1 |
+| `[GEO]`/`[SEM]`/`[DYN]`专家槽位 | Method/Stage 1b |
+| World-Action Model Backbone Ψ(规划主干) | Method/Stage 2 |
+| Query Bank(查询库，用于从冻结特征里读出压缩表征) | Method/Stage 2 |
