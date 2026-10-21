@@ -2,7 +2,7 @@
 
 - **Venue / year:** arXiv 2607.20175, 2026-07(目前Under Review，未确认被接收)
 - **Authors:** Yushan Liu, Tianxiong Lv, Bohua Wang, Hangqi Fan, Chenxu Zhao, He Zheng, Xuchang Zhong, Yifan Xie, Congyang Zhao, Zhihao Liao, Leigang Luo, Yang Cai, Xiao-Ping Zhang, Wenbo Ding — 清华大学深圳国际研究生院(Tsinghua SIGS)主导
-- **Link:** https://arxiv.org/abs/2607.20175
+- **Link:** https://arxiv.org/abs/2607.20175 ([本地PDF副本](pdf/perceptdrive.pdf))
 - **Code:** 未查到开源仓库，暂按未开源处理
 - **Input / 输入:** 多视角摄像头图像(喂给冻结的Perception Provider即微调+蒸馏后的InternVL3，产出专家特征`H_t`) + 视频流(喂给冻结的自监督视频编码器，产出`F_t`) + 自车状态(ego state：车速、航向角) + 导航指令(command：左转/右转等)
 - **Output / 输出:** 单条确定性规划轨迹(one trajectory)，推理时不做候选轨迹打分/重排(without test-time scoring or reranking)

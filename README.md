@@ -37,7 +37,9 @@
 | 22 | GAIA-1 | arXiv 2309.17080, 2023, Wayve(UK) | [notes/gaia-1.md](notes/gaia-1.md) | Not released (tech report only) — **note: Wayve, not Waymo** |
 | 23 | GAIA-2 | arXiv 2503.20523, 2025, Wayve(UK) | [notes/gaia-2.md](notes/gaia-2.md) | Not released (tech report only) |
 | 24 | SAMoE-VLA | arXiv 2603.08113, 2026, Tsinghua AIR | [notes/samoe-vla.md](notes/samoe-vla.md) | Not released ("code will be released soon") — scene-level MoE, explicitly critiques DriveMoE's token-level design |
-| 25 | PerceptDrive | arXiv 2607.20175, 2026, Tsinghua SIGS (under review) | [notes/perceptdrive.md](notes/perceptdrive.md) | Not found — **阅读中，笔记未完成**(目前只覆盖Related Work片段) — frozen priors + per-branch retention anchor + scene-conditioned router |
+| 25 | PerceptDrive | arXiv 2607.20175, 2026, Tsinghua SIGS (under review) | [notes/perceptdrive.md](notes/perceptdrive.md) | Not found — **阅读中**(已覆盖Related Work+两阶段训练结构+消融实验，架构图/Router细节待补) — frozen priors + per-branch retention anchor + scene-conditioned router |
+| 26 | ExpertAD | arXiv 2511.11740, 2025, **AAAI 2026已接收** | [notes/expertad.md](notes/expertad.md) | Not found — **阅读中，笔记仅基于摘要+对比表** — Perception Adapter + Top-4稀疏专家，8个功能专家(地图/跟踪/速度/朝向/导航) |
+| 27 | Drive-KD | arXiv 2601.21288, 2026 (preprint) | [notes/drive-kd.md](notes/drive-kd.md) | Not found — **阅读中，笔记仅基于摘要+对比表** — 多教师蒸馏(非MoE)，感知-推理-规划三元组+非对称梯度投影 |
 
 ## Synthesis(跨论文综合分析)
 
