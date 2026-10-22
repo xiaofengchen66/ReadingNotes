@@ -89,3 +89,35 @@
 ### 驾驶专用，补充进分组二
 
 - **[AMap](notes/amap.md)**、**[Deformable Gaussian Occupancy](notes/deformable-gaussian-occupancy.md)**、**[SemLT3D](notes/semlt3d.md)**、**[WPT](notes/wpt-world-policy.md)** 四篇明确是驾驶场景(HD地图/占据栅格/长尾3D检测/世界模型策略蒸馏)，但都不是MoE(除了SemLT3D有语言引导的MoE路由组件)，是"蒸馏"这条技术路线在驾驶具体子任务上的独立应用，可以跟分组一的MoE驾驶论文对照，看蒸馏和MoE这两条技术路线在驾驶场景里各自的优势区间。
+
+---
+
+## 补充：Driving models/planning批次(43篇，2026-10-21)
+
+CVPR 2026 Driving列表里"driving models/planning"这个核心类目(共45篇，DriveMoE已在分组一处理，EE-RL找不到可用链接跳过)，覆盖VLA/规划/世界认知等跟本repo研究方向最直接相关的论文。
+
+### 最重要的发现
+
+1. **[The Blind Spot of Adaptation (DEA)](notes/blind-spot-adaptation.md)** — **这批里跟路由漂移/遗忘问题关系最直接、也最驾驶专用的一篇**。明确指出VLM微调适配驾驶数据会侵蚀预训练世界知识，提出把适配从权重空间转移到prompt空间，按场景线索动态路由到不同知识专家来规避这个权衡。建议跟on-tokens-dilemma、spectral-moe-continual、prompt-anchored-reid这几篇的解法放在一起系统对比，这是目前查到的"路由漂移"问题最贴近驾驶场景的答案。
+
+2. **[DrivePI](notes/drivepi.md)** — **"全程"覆盖做得最完整的单一模型**：统一理解+感知(3D占据)+预测(占据流)+规划(动作)，端到端联合优化，只用0.5B参数的Qwen2.5就超过7B的VLA模型。是跟朱子欣讨论"全程MoE"时最该参考的反例/对照：不用MoE结构、不用蒸馏，靠统一架构+小模型也能做到全程覆盖，这提示"全程覆盖"本身可能不需要MoE/蒸馏才能实现，MoE/蒸馏的价值可能更在别处(比如本repo已经在讨论的计算效率、安全长尾、持续学习)。
+
+3. **[EventDrive](notes/eventdrive.md)** — **驾驶专用的真正MoE**，路由维度是"传感器模态"(事件流 vs 帧)，跟SAMoE-VLA(场景)、ExpertAD(功能子任务)、SemLT3D(类别语义)、MoEActok(技能)一起构成一个较完整的"专家按什么维度划分"案例库。
+
+### ⚠ 命名混淆警告(整理材料时务必注意)
+
+这批里出现了两次跟PerceptDrive相关术语撞名、但完全是不同论文的情况：
+
+- **[Percept-WAM](notes/percept-wam.md)**(arXiv 2511.19221) vs **PerceptDrive**(arXiv 2607.20175)：名字和研究方向都很像("感知增强的世界感知-动作模型" vs "感知先验世界-动作建模")，但Percept-WAM是单一VLM直接输出统一感知token，**没有**PerceptDrive那种冻结专家+场景条件路由机制。
+- **[WAM-Flow](notes/wam-flow.md)**(arXiv 2512.06112，复旦) vs PerceptDrive的**WAM Backbone**(World-Action Model Backbone，PerceptDrive笔记里的Stage 2规划主干)：WAM-Flow是一篇独立论文(离散流匹配规划器)，"WAM"这个缩写只是巧合撞上了PerceptDrive笔记里对自家Stage 2模块的称呼。
+
+跟朱子欣/乔老师汇报时，这三者(Percept-WAM、WAM-Flow、PerceptDrive的WAM Backbone)一定要分清楚，避免引用错论文。
+
+### 省计算量的更多案例(呼应"SA-MoE没有真正省计算量"这个局限)
+
+- **[ColaVLA](notes/colavla.md)** — 每次决策只需两次VLM前向传播
+- **[Prune2Drive](notes/prune2drive.md)** — 即插即用多视角VLM token剪枝，不需要重训
+- **[Driving on Registers](notes/driving-on-registers.md)** — 相机感知寄存器token压缩多摄像头特征，吞吐量提升3倍
+- **[Unifying Language-Action (LinkVLA)](notes/unifying-language-action.md)** — 共享离散码本+两步生成，推理时间-86%
+
+这四篇加上之前Distillation批次找到的WPT(4.9倍)、Foundry(边缘蒸馏)，已经有6个独立的"怎么让驾驶VLA/MoE真正变快"的具体方案，可以整理成一张方法对比表。
