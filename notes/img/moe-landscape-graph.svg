@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1900 1400" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1900" height="1400" fill="#ffffff"/>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="1900" height="80" fill="#14326b"/>
+  <text x="950" y="35" text-anchor="middle" fill="#ffffff" font-size="26" font-weight="bold">MoE 驾驶研究知识图谱：朱子欣idea vs. 96篇论文(2026-10)</text>
+  <text x="950" y="62" text-anchor="middle" fill="#cfe0ff" font-size="15">"全程MoE(感知+预测+规划) + 蒸馏别的MoE当冻结专家训练轻量路由" —— 这个组合目前没人做过，但每一半都有独立证据</text>
+
+  <!-- Center idea node -->
+  <circle cx="950" cy="260" r="95" fill="#1e3a8a" stroke="#0f1f45" stroke-width="3"/>
+  <text x="950" y="248" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="bold">朱子欣的idea</text>
+  <text x="950" y="268" text-anchor="middle" fill="#cfe0ff" font-size="11">全程MoE +</text>
+  <text x="950" y="283" text-anchor="middle" fill="#cfe0ff" font-size="11">蒸馏别的MoE</text>
+
+  <!-- ===== Cluster A: 机制最像(distill into MoE) ===== -->
+  <g>
+    <rect x="60" y="150" width="400" height="300" rx="12" fill="#eef4ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="260" y="178" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e3a8a">① 蒸馏别的模型→MoE 机制</text>
+
+    <rect x="80" y="195" width="360" height="75" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="260" y="215" text-anchor="middle" font-size="13" font-weight="bold">SigLino ★★★ 精读</text>
+    <text x="260" y="233" text-anchor="middle" font-size="10.5">多教师(SigLIP2+DINOv3)蒸馏进MoE学生，</text>
+    <text x="260" y="248" text-anchor="middle" font-size="10.5">再用MoE专家初始化下游VLM——机制最完整，但非驾驶</text>
+
+    <rect x="80" y="280" width="360" height="65" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="260" y="300" text-anchor="middle" font-size="13" font-weight="bold">PerceptDrive ★★★ 精读</text>
+    <text x="260" y="318" text-anchor="middle" font-size="10.5">驾驶+冻结专家+场景条件路由，但教师是通用</text>
+    <text x="260" y="332" text-anchor="middle" font-size="10.5">基础模型(VGGT/V-JEPA2/Wan2.1)，非驾驶MoE</text>
+
+    <rect x="80" y="355" width="170" height="80" rx="8" fill="#f8fafc" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="165" y="373" text-anchor="middle" font-size="11.5" font-weight="bold">GTR-Turbo ★★★精读</text>
+    <text x="165" y="390" text-anchor="middle" font-size="9.5">合并历史checkpoint</text>
+    <text x="165" y="403" text-anchor="middle" font-size="9.5">当免费教师(TIES)，</text>
+    <text x="165" y="416" text-anchor="middle" font-size="9.5">参数融合同一数学操作</text>
+
+    <rect x="260" y="355" width="180" height="80" rx="8" fill="#f8fafc" stroke="#93c5fd" stroke-width="1.5"/>
+    <text x="350" y="373" text-anchor="middle" font-size="11.5" font-weight="bold">SegMoTE ★★★精读</text>
+    <text x="350" y="390" text-anchor="middle" font-size="9.5">冻结SAM+轻量</text>
+    <text x="350" y="403" text-anchor="middle" font-size="9.5">token-MoE适配，</text>
+    <text x="350" y="416" text-anchor="middle" font-size="9.5">同一设计模式验证(医学)</text>
+  </g>
+
+  <!-- ===== Cluster B: 全程覆盖但不是MoE ===== -->
+  <g>
+    <rect x="1440" y="150" width="400" height="300" rx="12" fill="#fdf2f8" stroke="#be185d" stroke-width="2"/>
+    <text x="1640" y="178" text-anchor="middle" font-size="16" font-weight="bold" fill="#9d174d">② "全程"覆盖 但不是MoE</text>
+
+    <rect x="1460" y="195" width="360" height="75" rx="8" fill="#ffffff" stroke="#be185d" stroke-width="1.5"/>
+    <text x="1640" y="215" text-anchor="middle" font-size="13" font-weight="bold">Drive-KD ★ 摘要级</text>
+    <text x="1640" y="233" text-anchor="middle" font-size="10.5">感知-推理-规划三元组多教师蒸馏，</text>
+    <text x="1640" y="248" text-anchor="middle" font-size="10.5">范围最全，但蒸馏成单一dense模型，无路由</text>
+
+    <rect x="1460" y="280" width="360" height="75" rx="8" fill="#ffffff" stroke="#be185d" stroke-width="1.5"/>
+    <text x="1640" y="300" text-anchor="middle" font-size="13" font-weight="bold">DrivePI ★ 摘要级</text>
+    <text x="1640" y="318" text-anchor="middle" font-size="10.5">统一理解+感知+预测+规划，0.5B参数</text>
+    <text x="1640" y="333" text-anchor="middle" font-size="10.5">超7B模型——证明"全程"不一定需要MoE/蒸馏</text>
+
+    <rect x="1460" y="365" width="360" height="65" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+    <text x="1640" y="385" text-anchor="middle" font-size="12" font-weight="bold" fill="#9a3412">⚠ 命名混淆警告</text>
+    <text x="1640" y="403" text-anchor="middle" font-size="10">Percept-WAM ≠ PerceptDrive；WAM-Flow ≠ PerceptDrive的WAM Backbone</text>
+    <text x="1640" y="417" text-anchor="middle" font-size="10">三个不同论文/术语，汇报时务必分清</text>
+  </g>
+
+  <!-- ===== Cluster C: 真MoE但非蒸馏(专家划分维度案例库) ===== -->
+  <g>
+    <rect x="60" y="480" width="780" height="280" rx="12" fill="#eafaf0" stroke="#15803d" stroke-width="2"/>
+    <text x="450" y="508" text-anchor="middle" font-size="16" font-weight="bold" fill="#14532d">③ 真MoE但专家是从头训练(非蒸馏)——专家划分维度案例库</text>
+
+    <rect x="80" y="525" width="230" height="90" rx="8" fill="#ffffff" stroke="#15803d" stroke-width="1.5"/>
+    <text x="195" y="545" text-anchor="middle" font-size="12" font-weight="bold">SAMoE-VLA ★★★精读</text>
+    <text x="195" y="562" text-anchor="middle" font-size="10">按【场景】划分</text>
+    <text x="195" y="577" text-anchor="middle" font-size="10">参数融合(非选择)</text>
+    <text x="195" y="592" text-anchor="middle" font-size="10">批评DriveMoE token级设计</text>
+
+    <rect x="320" y="525" width="230" height="90" rx="8" fill="#ffffff" stroke="#15803d" stroke-width="1.5"/>
+    <text x="435" y="545" text-anchor="middle" font-size="12" font-weight="bold">ExpertAD ★★★精读⚠已修正</text>
+    <text x="435" y="562" text-anchor="middle" font-size="10">按【功能子任务】划分</text>
+    <text x="435" y="577" text-anchor="middle" font-size="10">但MoE仅存在于</text>
+    <text x="435" y="592" text-anchor="middle" font-size="10">Prediction一段，非全程</text>
+
+    <rect x="560" y="525" width="250" height="90" rx="8" fill="#ffffff" stroke="#15803d" stroke-width="1.5"/>
+    <text x="685" y="545" text-anchor="middle" font-size="12" font-weight="bold">EventDrive ★★★精读</text>
+    <text x="685" y="562" text-anchor="middle" font-size="10">按【传感器模态/时间粒度】划分</text>
+    <text x="685" y="577" text-anchor="middle" font-size="10">覆盖感知-理解-预测-规划</text>
+    <text x="685" y="592" text-anchor="middle" font-size="10">评测，但路由只在编码阶段</text>
+
+    <rect x="80" y="630" width="230" height="75" rx="8" fill="#f8fafc" stroke="#86efac" stroke-width="1.5"/>
+    <text x="195" y="650" text-anchor="middle" font-size="11.5" font-weight="bold">SemLT3D(摘要级)</text>
+    <text x="195" y="667" text-anchor="middle" font-size="9.5">按【类别语义】划分</text>
+    <text x="195" y="681" text-anchor="middle" font-size="9.5">长尾安全关键类别</text>
+
+    <rect x="320" y="630" width="230" height="75" rx="8" fill="#f8fafc" stroke="#86efac" stroke-width="1.5"/>
+    <text x="435" y="650" text-anchor="middle" font-size="11.5" font-weight="bold">MoEActok(摘要级)</text>
+    <text x="435" y="667" text-anchor="middle" font-size="9.5">按【技能】划分</text>
+    <text x="435" y="681" text-anchor="middle" font-size="9.5">动作token化专家</text>
+
+    <rect x="560" y="630" width="250" height="75" rx="8" fill="#f8fafc" stroke="#86efac" stroke-width="1.5"/>
+    <text x="685" y="650" text-anchor="middle" font-size="11.5" font-weight="bold">DriveMoE(摘要级)</text>
+    <text x="685" y="667" text-anchor="middle" font-size="9.5">按【摄像头视角+驾驶行为】划分</text>
+    <text x="685" y="681" text-anchor="middle" font-size="9.5">感知+规划2段，被SAMoE-VLA批评</text>
+  </g>
+
+  <!-- ===== Cluster D: 省计算量的参照 ===== -->
+  <g>
+    <rect x="1060" y="480" width="780" height="280" rx="12" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+    <text x="1450" y="508" text-anchor="middle" font-size="16" font-weight="bold" fill="#9a3412">④ 回应"SA-MoE没有真正省计算量"的参照</text>
+
+    <rect x="1080" y="525" width="230" height="90" rx="8" fill="#ffffff" stroke="#c2410c" stroke-width="1.5"/>
+    <text x="1195" y="545" text-anchor="middle" font-size="12" font-weight="bold">MoDES ★★★精读</text>
+    <text x="1195" y="562" text-anchor="middle" font-size="10">层级+模态感知</text>
+    <text x="1195" y="577" text-anchor="middle" font-size="10">动态跳专家，跳88%</text>
+    <text x="1195" y="592" text-anchor="middle" font-size="10">反而+10.67%精度</text>
+
+    <rect x="1320" y="525" width="230" height="90" rx="8" fill="#ffffff" stroke="#c2410c" stroke-width="1.5"/>
+    <text x="1435" y="545" text-anchor="middle" font-size="12" font-weight="bold">UniMMAD ★★★精读</text>
+    <text x="1435" y="562" text-anchor="middle" font-size="10">MoE-in-MoE嵌套，</text>
+    <text x="1435" y="577" text-anchor="middle" font-size="10">共享base experts，</text>
+    <text x="1435" y="592" text-anchor="middle" font-size="10">参数量减少约75%</text>
+
+    <rect x="1560" y="525" width="250" height="90" rx="8" fill="#ffffff" stroke="#c2410c" stroke-width="1.5"/>
+    <text x="1685" y="545" text-anchor="middle" font-size="12" font-weight="bold">WPT ★★★精读</text>
+    <text x="1685" y="562" text-anchor="middle" font-size="10">世界模型只训练时用，</text>
+    <text x="1685" y="577" text-anchor="middle" font-size="10">蒸馏进轻量学生，</text>
+    <text x="1685" y="592" text-anchor="middle" font-size="10">推理快4.9倍(驾驶)</text>
+
+    <rect x="1080" y="630" width="170" height="75" rx="8" fill="#f8fafc" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="1165" y="650" text-anchor="middle" font-size="10.5" font-weight="bold">ColaVLA(摘要级)</text>
+    <text x="1165" y="667" text-anchor="middle" font-size="9">只需2次VLM</text>
+    <text x="1165" y="679" text-anchor="middle" font-size="9">前向(驾驶)</text>
+
+    <rect x="1260" y="630" width="170" height="75" rx="8" fill="#f8fafc" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="1345" y="650" text-anchor="middle" font-size="10.5" font-weight="bold">Prune2Drive(摘要级)</text>
+    <text x="1345" y="667" text-anchor="middle" font-size="9">免训练token</text>
+    <text x="1345" y="679" text-anchor="middle" font-size="9">剪枝(驾驶)</text>
+
+    <rect x="1440" y="630" width="180" height="75" rx="8" fill="#f8fafc" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="1530" y="650" text-anchor="middle" font-size="10.5" font-weight="bold">Driving on Registers</text>
+    <text x="1530" y="667" text-anchor="middle" font-size="9">寄存器token压缩，</text>
+    <text x="1530" y="679" text-anchor="middle" font-size="9">3倍吞吐量(驾驶)</text>
+
+    <rect x="1630" y="630" width="180" height="75" rx="8" fill="#f8fafc" stroke="#fdba74" stroke-width="1.5"/>
+    <text x="1720" y="650" text-anchor="middle" font-size="10.5" font-weight="bold">LinkVLA(摘要级)</text>
+    <text x="1720" y="667" text-anchor="middle" font-size="9">共享码本，推理</text>
+    <text x="1720" y="679" text-anchor="middle" font-size="9">时间-86%(驾驶)</text>
+  </g>
+
+  <!-- ===== Cluster E: 路由漂移/持续学习 ===== -->
+  <g>
+    <rect x="60" y="800" width="780" height="230" rx="12" fill="#f3e8ff" stroke="#7e22ce" stroke-width="2"/>
+    <text x="450" y="828" text-anchor="middle" font-size="16" font-weight="bold" fill="#581c87">⑤ "路由漂移/防遗忘"——H_BEV滞后问题的参照</text>
+
+    <rect x="80" y="845" width="230" height="90" rx="8" fill="#ffffff" stroke="#7e22ce" stroke-width="1.5"/>
+    <text x="195" y="865" text-anchor="middle" font-size="12" font-weight="bold">On Token's Dilemma</text>
+    <text x="195" y="865" dy="18" text-anchor="middle" font-size="10" font-weight="bold">★★★精读</text>
+    <text x="195" y="900" text-anchor="middle" font-size="10">新/旧/模糊token分类，</text>
+    <text x="195" y="915" text-anchor="middle" font-size="10">引导路由避免漂移</text>
+
+    <rect x="320" y="845" width="230" height="90" rx="8" fill="#ffffff" stroke="#7e22ce" stroke-width="1.5"/>
+    <text x="435" y="865" text-anchor="middle" font-size="12" font-weight="bold">Spectral MoE(摘要级)</text>
+    <text x="435" y="900" text-anchor="middle" font-size="10">频谱正交掩码+双路由器</text>
+    <text x="435" y="915" text-anchor="middle" font-size="10">对抗漂移，代码已开源</text>
+
+    <rect x="560" y="845" width="250" height="90" rx="8" fill="#ffffff" stroke="#7e22ce" stroke-width="1.5"/>
+    <text x="685" y="865" text-anchor="middle" font-size="12" font-weight="bold">Blind Spot of Adaptation</text>
+    <text x="685" y="865" dy="18" text-anchor="middle" font-size="10" font-weight="bold">★ 摘要级(驾驶专用)</text>
+    <text x="685" y="900" text-anchor="middle" font-size="10">prompt空间动态路由到</text>
+    <text x="685" y="915" text-anchor="middle" font-size="10">知识专家，而非权重空间</text>
+
+    <rect x="80" y="950" width="710" height="60" rx="8" fill="#f8fafc" stroke="#d8b4fe" stroke-width="1.5"/>
+    <text x="435" y="972" text-anchor="middle" font-size="10.5">Prompt-Anchored ReID(摘要级)：冻结文本锚点+新增槽位/冻结旧槽位——第三种防遗忘机制</text>
+    <text x="435" y="990" text-anchor="middle" font-size="10.5">三篇合起来构成"MoE/VLM怎么防止持续学习/微调时遗忘"这个问题的三种独立解法</text>
+  </g>
+
+  <!-- ===== Cluster F: 获得前瞻性而不增加推理开销 ===== -->
+  <g>
+    <rect x="1060" y="800" width="780" height="230" rx="12" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+    <text x="1450" y="828" text-anchor="middle" font-size="16" font-weight="bold" fill="#075985">⑥ "怎么获得前瞻性，推理零开销"——三种独立路线</text>
+
+    <rect x="1080" y="845" width="230" height="90" rx="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
+    <text x="1195" y="865" text-anchor="middle" font-size="12" font-weight="bold">WPT ★★★精读</text>
+    <text x="1195" y="900" text-anchor="middle" font-size="10">外部预训练世界模型</text>
+    <text x="1195" y="915" text-anchor="middle" font-size="10">训练时监督，蒸馏进学生</text>
+
+    <rect x="1320" y="845" width="230" height="90" rx="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
+    <text x="1435" y="865" text-anchor="middle" font-size="12" font-weight="bold">AMap ★★★精读</text>
+    <text x="1435" y="900" text-anchor="middle" font-size="10">训练时特权访问未来帧</text>
+    <text x="1435" y="915" text-anchor="middle" font-size="10">的教师，蒸馏给当前帧学生</text>
+
+    <rect x="1560" y="845" width="250" height="90" rx="8" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
+    <text x="1685" y="865" text-anchor="middle" font-size="12" font-weight="bold">PerceptDrive ★★★精读</text>
+    <text x="1685" y="900" text-anchor="middle" font-size="10">模型自监督自预测</text>
+    <text x="1685" y="915" text-anchor="middle" font-size="10">action-free未来隐特征</text>
+
+    <rect x="1080" y="950" width="730" height="60" rx="8" fill="#f8fafc" stroke="#7dd3fc" stroke-width="1.5"/>
+    <text x="1445" y="975" text-anchor="middle" font-size="11">三种路线互不相同：外部世界模型 vs. 训练时特权未来帧 vs. 自监督自预测——</text>
+    <text x="1445" y="992" text-anchor="middle" font-size="11">可以作为"H_BEV只算一次、场景突变路由滞后"这个局限的三个候选解法对比</text>
+  </g>
+
+  <!-- Connector lines from center to cluster headers (simplified) -->
+  <g stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="4,3">
+    <path d="M 870 310 Q 600 380 260 445"/>
+    <path d="M 1030 310 Q 1300 380 1640 445"/>
+    <path d="M 950 355 Q 950 420 450 475"/>
+    <path d="M 950 355 Q 950 420 1450 475"/>
+  </g>
+
+  <!-- Bottom conclusion bar -->
+  <rect x="0" y="1050" width="1900" height="350" fill="#111827"/>
+  <text x="950" y="1085" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">结论：96篇论文里，没有一篇同时做到"全程"和"蒸馏别的MoE"——这个空子依然成立</text>
+
+  <g fill="#e5e7eb" font-size="13">
+    <text x="90" y="1125" font-weight="bold" fill="#93c5fd">机制最像(①)的SigLino</text>
+    <text x="90" y="1145">— 不是驾驶、教师是通用基础模型，不是别的驾驶MoE</text>
+
+    <text x="90" y="1180" font-weight="bold" fill="#f9a8d4">驾驶里机制最像的PerceptDrive</text>
+    <text x="90" y="1200">— 不蒸馏别的MoE、路由只在规划阶段一次性发生，不是全程</text>
+
+    <text x="990" y="1125" font-weight="bold" fill="#86efac">覆盖最全的Drive-KD</text>
+    <text x="990" y="1145">— 完全不是MoE，蒸馏成单一dense模型，没有路由结构</text>
+
+    <text x="990" y="1180" font-weight="bold" fill="#fdba74">真正有路由的ExpertAD/EventDrive/DriveMoE</text>
+    <text x="990" y="1200">— 专家都是从头训练，不是蒸馏自外部已有模型</text>
+  </g>
+
+  <rect x="90" y="1225" width="1720" height="155" rx="10" fill="#1e3a8a"/>
+  <text x="950" y="1255" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="bold">给朱子欣/乔老师汇报的差异化建议(两个仍然开放的方向)</text>
+  <text x="950" y="1285" text-anchor="middle" fill="#cfe0ff" font-size="13">① 蒸馏DriveMoE/SAMoE-VLA/ExpertAD这类已有的驾驶专用MoE系统当冻结专家(而非通用基础模型)——</text>
+  <text x="950" y="1305" text-anchor="middle" fill="#cfe0ff" font-size="13">前提：先确认这些模型是否真的开源了权重，否则无法实际"蒸馏"</text>
+  <text x="950" y="1335" text-anchor="middle" fill="#cfe0ff" font-size="13">② 在感知/预测/规划三段都各自做场景条件路由(而非只在一处路由一次)——</text>
+  <text x="950" y="1355" text-anchor="middle" fill="#cfe0ff" font-size="13">可借鉴EventDrive的多维度专家划分思路 + MoDES/UniMMAD的省计算量技巧，分别应用到三段</text>
+
+</svg>

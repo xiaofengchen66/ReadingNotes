@@ -1,6 +1,10 @@
-# MoE 全景知识图谱(CVPR 2026批次，2026-10-21)
+# MoE 全景知识图谱(CVPR 2026批次，2026-10-21，2026-10-22更新)
 
 > 把这个repo里所有跟MoE相关的论文(驾驶专用 + CVPR 2026通用MoE批量摘要级整理)按"解决的是哪个层面的问题"分组，标出谁能直接回应谁。驾驶专用的几篇是精读过的，通用MoE这23篇目前只是摘要级([阅读进度说明]里有标注)，细读后再回填具体结论。
+
+![MoE驾驶研究知识图谱：朱子欣idea vs 96篇论文的六大分组关系图](notes/img/moe-landscape-graph.svg)
+
+**2026-10-22更新：已完成8篇全文精读**(MoDES、UniMMAD、WPT、GTR-Turbo、On Token's Dilemma、SegMoTE、AMap、EventDrive)，加上此前精读的SAMoE-VLA、PerceptDrive、SigLino、DEA(Blind Spot of Adaptation)、ExpertAD(精读后修正)，共13篇全文精读、83篇仍是摘要级。完整进度总结见本文档最后的"2026-10-22 精读进度总结"一节。
 
 ## 分组一：驾驶专用MoE(已精读/精读中)
 
@@ -129,3 +133,37 @@ CVPR 2026 Driving列表里"driving models/planning"这个核心类目(共45篇�
 - **[Unifying Language-Action (LinkVLA)](notes/unifying-language-action.md)** — 共享离散码本+两步生成，推理时间-86%
 
 这四篇加上之前Distillation批次找到的WPT(4.9倍)、Foundry(边缘蒸馏)，已经有6个独立的"怎么让驾驶VLA/MoE真正变快"的具体方案，可以整理成一张方法对比表。
+
+---
+
+## 2026-10-22 精读进度总结
+
+### 本轮新完成的8篇全文精读
+
+| 论文 | 一句话核心贡献 | 对应哪个已识别的空子/问题 |
+|---|---|---|
+| [MoDES](notes/modes.md) | 层级+模态双重感知的动态专家跳过，跳88%专家反而+10.67%精度，代码已开源 | "SA-MoE没有真正省计算量" |
+| [UniMMAD](notes/unimmad.md) | MoE-in-MoE嵌套结构，路由专家共享base experts，参数量减少约75% | "SA-MoE没有真正省计算量" |
+| [WPT](notes/wpt-world-policy.md) | 世界模型只在训练时用，蒸馏进轻量学生，推理快4.9倍(驾驶专用) | "怎么让驾驶模型又快又好"最完整答案 |
+| [GTR-Turbo](notes/gtr-turbo.md) | 合并RL历史checkpoint(TIES)当免费教师，训练时间-50%、算力-60% | 跟SAMoE-VLA参数融合同一数学操作的具体收益参照 |
+| [On Token's Dilemma](notes/on-tokens-dilemma.md) | 新/旧/模糊token分类+引导路由，解决MoE持续学习的"路由漂移" | "路由漂移/防遗忘"问题 |
+| [SegMoTE](notes/segmote.md) | 冻结SAM+轻量token-MoE适配任意医学模态，17M参数、1%数据达SOTA | 验证"冻结骨干+轻量MoE插件"跨领域有效 |
+| [AMap](notes/amap.md) | "从未来蒸馏"：训练时特权访问未来帧的教师，蒸馏给当前帧学生(驾驶专用) | "怎么获得前瞻性、推理零开销"第三种路线 |
+| [EventDrive](notes/eventdrive.md) | 按传感器模态/时间粒度做真正MoE路由，覆盖感知-理解-预测-规划评测(驾驶专用) | 专家划分维度案例库第五种维度 |
+
+### 一个重要修正
+
+**ExpertAD**(此前已精读过，但这次被用户指出理解有误后重新核实)：abstract写"spans perception and planning"，但实际架构里真正的MoE(MoSE)只存在于Prediction模块，Perception段(PA)是特征重加权非MoE，Planning段完全复用基线——这次修正让"全程MoE查了96篇都没找到"这个结论比最初判断时更确定。
+
+### 核心结论没有变化，但证据更扎实了
+
+查了96篇、精读了13篇关键候选之后，**"蒸馏DriveMoE/SAMoE-VLA/ExpertAD这类已有驾驶专用MoE系统当冻结专家、在感知-预测-规划三段都做场景条件路由"这个组合，依然没人做过**。完整的论证链条见本文档开头的知识图谱(notes/img/moe-landscape-graph.svg)。
+
+### 还没精读的83篇怎么处理
+
+剩下83篇目前都只是摘要级(基于WebSearch检索到的摘要信息，不是精读)，按价值排序，如果要继续精读，优先级建议：
+1. **Spectral MoE**(代码已开源，跟On Token's Dilemma构成路由漂移问题的两种独立解法)
+2. **Prompt-Anchored ReID**(第三种防遗忘机制，代码已开源)
+3. **DrivePI**(驾驶全程覆盖但非MoE的关键反例，0.5B参数超7B模型)
+4. **ColaVLA / Driving on Registers / Prune2Drive / Unifying Language-Action(LinkVLA)**(四篇都是驾驶专用的省计算量具体方案，知识图谱分组④里已列出但还是摘要级)
+5. 其余79篇(主要是医学/遥感/通用CV方向，跟驾驶/MoE核心研究方向关联度递减)
