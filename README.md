@@ -40,6 +40,29 @@
 | 25 | PerceptDrive | arXiv 2607.20175, 2026, Tsinghua SIGS (under review) | [notes/perceptdrive.md](notes/perceptdrive.md) | Not found — **阅读中**(已覆盖Related Work+两阶段训练结构+消融实验，架构图/Router细节待补) — frozen priors + per-branch retention anchor + scene-conditioned router |
 | 26 | ExpertAD | arXiv 2511.11740, 2025, **AAAI 2026已接收** | [notes/expertad.md](notes/expertad.md) | Not found — **阅读中，笔记仅基于摘要+对比表** — Perception Adapter + Top-4稀疏专家，8个功能专家(地图/跟踪/速度/朝向/导航) |
 | 27 | Drive-KD | arXiv 2601.21288, 2026 (preprint) | [notes/drive-kd.md](notes/drive-kd.md) | Not found — **阅读中，笔记仅基于摘要+对比表** — 多教师蒸馏(非MoE)，感知-推理-规划三元组+非对称梯度投影 |
+| 28 | DriveMoE | arXiv 2505.16278, 2025 (CVPR 2026) | [notes/drivemoe.md](notes/drivemoe.md) | Not verified — scene-select Vision MoE + skill-specialized Action MoE; the paper SAMoE-VLA critiques by name |
+| 29 | Cluster-Aware Upcycling for MoE | CVPR 2026, LG AI Research | [notes/cluster-aware-upcycling.md](notes/cluster-aware-upcycling.md) | Not verified — semantic-cluster SVD init for sparse upcycling, not driving-specific |
+| 30 | ERMoE | arXiv 2511.10971, 2025 (CVPR 2026) | [notes/ermoe.md](notes/ermoe.md) | Not verified — eigenbasis routing instead of learned gating, not driving-specific |
+| 31 | Life-IQA | arXiv 2511.19024, 2025 (CVPR 2026) | [notes/life-iqa.md](notes/life-iqa.md) | Not verified — MoE feature decoupling for blind image quality, not driving-specific |
+| 32 | Local Precise Refinement (Dual-Gated MoE) | arXiv 2603.13352, 2026 (CVPR 2026) | [notes/local-precise-refinement.md](notes/local-precise-refinement.md) | Not verified — token-level dual-gated MoE against spectral shift, not driving-specific |
+| 33 | M4-SAM | arXiv 2605.11760, 2026 (CVPR 2026) | [notes/m4-sam.md](notes/m4-sam.md) | Not verified — MoE-LoRA into SAM2 for RGB-D video salient detection, not driving-specific |
+| 34 | MoE-FD (Open Vocab Scene Graph) | CVPR 2026 | [notes/moe-fd-scene-graph.md](notes/moe-fd-scene-graph.md) | Not verified — MoE feature decoupling for scene graph generation, not driving-specific |
+| 35 | MoDES | arXiv 2511.15690, 2025 (CVPR 2026) | [notes/modes.md](notes/modes.md) | Not verified — training-free dynamic expert skipping; directly relevant to the "SA-MoE doesn't save compute" gap |
+| 36 | MoE-GRPO | arXiv 2603.24984, 2026 (CVPR 2026) | [notes/moe-grpo.md](notes/moe-grpo.md) | Not verified — RL (GRPO)-trained expert routing, alternative router-training signal vs. PerceptDrive's metric distillation |
+| 37 | MoEActok | CVPR 2026 | [notes/moeactok.md](notes/moeactok.md) | Not verified — MoE VQ-VAE action tokenizer, experts split by skill not scene |
+| 38 | MoRE (3D Geometry) | arXiv 2510.27234, 2025 (CVPR 2026) | [notes/more-3d-geometry.md](notes/more-3d-geometry.md) | Not verified — MoE-routed 3D geometry foundation model, parallels PerceptDrive's DSE |
+| 39 | NESTOR | arXiv 2602.22059, 2026 (CVPR 2026) | [notes/nestor.md](notes/nestor.md) | Not verified — nested image-level + token-level MoE for PDE pretraining; independent echo of the scene/token granularity argument |
+| 40 | On Token's Dilemma (LLaVA-DyMoE) | arXiv 2603.27481, 2026 (CVPR 2026) | [notes/on-tokens-dilemma.md](notes/on-tokens-dilemma.md) | Not verified — drift-aware token assignment against continual-learning routing drift |
+| 41 | PromptMoE | arXiv 2603.12538, 2026 (CVPR 2026) | [notes/promptmoe.md](notes/promptmoe.md) | Not verified — MoE-driven segmentation prompt refinement, not driving-specific |
+| 42 | Quant Experts | arXiv 2602.24059, 2026 (CVPR 2026) | [notes/quant-experts.md](notes/quant-experts.md) | Not verified — shared + routed LoRA experts for VLM quantization error, not driving-specific |
+| 43 | SegMoTE | arXiv 2602.19213, 2026 (CVPR 2026 Oral) | [notes/segmote.md](notes/segmote.md) | Not verified — frozen SAM encoder + lightweight trainable token-level MoE; same "freeze + lightweight router" pattern as PerceptDrive, different domain |
+| 44 | SMoES | arXiv 2604.23996, 2026 (CVPR 2026) | [notes/smoes.md](notes/smoes.md) | Not verified — soft modality-guided expert specialization, from Li Auto |
+| 45 | Spectral MoE for Continual Learning | CVPR 2026 | [notes/spectral-moe-continual.md](notes/spectral-moe-continual.md) | Released (github.com/ouycc/Spectral_MoE) — spectral experts + dual-router against routing drift, alternative to on-tokens-dilemma's fix |
+| 46 | TAG-MoE | arXiv 2601.08881, 2026 (CVPR 2026) | [notes/tag-moe.md](notes/tag-moe.md) | Not verified — task-semantic-conditioned gating for unified generation, independent echo of scene-conditioned routing in a different domain |
+| 47 | Teacher-Guided Routing for Sparse Vision MoE | arXiv 2604.21330, 2026 (CVPR 2026) | [notes/tgr-moe.md](notes/tgr-moe.md) | Not verified — dense-teacher-supervised router training, distinct from Drive-KD (which has no router at all) |
+| 48 | UniMMAD | arXiv 2509.25934, 2025 (CVPR 2026) | [notes/unimmad.md](notes/unimmad.md) | Not verified — MoE-in-MoE cuts MoE params ~75%; directly relevant to the "SA-MoE doesn't save compute" gap |
+| 49 | VidPrism | arXiv 2605.28229, 2026 (CVPR 2026) | [notes/vidprism.md](notes/vidprism.md) | Not verified — names and addresses "expert homogenization" as a named MoE failure mode |
+| 50 | YOLO-Master | arXiv 2512.23273, 2025 (CVPR 2026) | [notes/yolo-master.md](notes/yolo-master.md) | Not verified — instance-conditional adaptive compute via MoE, real-time detection |
 
 ## Synthesis(跨论文综合分析)
 
@@ -47,6 +70,7 @@
 
 - [representation-synthesis-2026.md](representation-synthesis-2026.md) — 按 End-to-end AD Survey §4.2(表征设计/表征学习)的框架,把 WA-JEPA / Drive-JEPA / Qwen-Drive-1.0 / DriveZero / SparseDriveV2 分别映射进去,指出 §4.2(表征学习)和 §4.3(世界模型)的边界正在消失,并提出 5 个可推进的具体方向
 - [sensor-fusion-qa.md](sensor-fusion-qa.md) — 由 EMMA(Waymo)附录局限性段落引出的跨论文 Q&A:摄像头/LiDAR/雷达各自优劣、"融合"的真正目的(不是数据标准化)、为什么 VLM 驱动的模型普遍选纯视觉、传统融合 vs 接入大模型的融合成熟度差异、LiDAR 点云数据格式详解
+- [moe-landscape-synthesis-2026-10.md](moe-landscape-synthesis-2026-10.md) — CVPR 2026 MoE全景图谱:驾驶专用MoE(DriveMoE/SAMoE-VLA/PerceptDrive/ExpertAD/Drive-KD等)+23篇通用MoE技术论文,按"路由颗粒度/路由训练信号/省计算量/持续学习防漂移/专家从哪来/路由失效模式"分组,并标出每个已识别的研究空子对应哪些可参考技术
 
 ## 结构
 
