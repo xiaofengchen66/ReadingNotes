@@ -158,6 +158,11 @@ Mean：H_BEV内部其实还是多个向量(对应场景里不同采样点)，Mea
 **11. 另一个值得提的改进方向：SA-MoE没有真正省计算量**
 参数融合虽然聪明，但每层还是要把4个专家的完整参数矩阵都算一遍加权和，不是只挑一个专家跑，所以没有拿到SparseMoE那种"只算一个专家、省掉其他三个"的计算优势——它是用更聪明的路由换效果，没有换来更快的速度。这个和上面"decision module按需请求信息、frozen experts+轻量路由"的方向是同一个缺口。
 
+**12. CMCA的输出O本质是attention算出来的结果，不是K/V——跟PerceptDrive的Query Bank对比**
+CMCA是**self-attention+结构化mask**：Q/K/V全部来自同一串序列(条件token+动作token拼在一起)，特殊之处在softmax之前盖了一层mask——条件token(BEV/世界/语言/自车状态)对谁都可见、不受限制，动作token只能看到条件token+自己前面已生成的动作token(因果限制)。"Conditional"对应条件token恒可见，"Causal"对应动作token只能看过去。算完之后的输出O就是这层attention的结果，再通过残差连接加回去变成H，O不是K也不是V，是K/V被拿去算softmax(QK^T/√d)V之后产出的东西。
+
+对比PerceptDrive笔记里的Query Bank(详见该笔记"关键术语解析")：Query Bank是**cross-attention**，Q来自一组可学习、数量固定的"提问模板"，K/V来自冻结的感知特征，干的事是"**压缩**"(把又长又大的冻结特征浓缩成一小撮能用的token)；CMCA是**self-attention+结构化mask**，Q/K/V都来自同一串序列，干的事是"**按规则组织信息怎么互相看**"(不是为了变短，是为了让条件token和动作token按规则互相感知)。两者底层都是同一套Q/K/V+softmax数学工具，但解决的问题完全不同——这个对比可以直接用来跟朱子欣/乔老师讲清楚这两篇论文"都用了attention"但用法本质不同。
+
 ---
 
 ## 相关工作排查(2026-10-15，尚未精读)
@@ -166,7 +171,7 @@ Mean：H_BEV内部其实还是多个向量(对应场景里不同采样点)，Mea
 
 - **PerceptDrive**(arXiv 2607.20175, 2026-07, 真实论文，目前仅预印本未确认接收) — 拿**冻结的感知基础模型**+**冻结的自监督视频编码器**，把蒸馏出的teacher先验喂给一个**可训练的专家路由world-action模型**，思路跟"冻结专家+蒸馏+轻量路由"几乎一致，是目前查到最接近的撞车风险点。差异可能在于：它冻结的是通用感知基础模型，不是别的MoE驾驶模型本身；也没有明确覆盖"预测"这一段。
 - **Drive-KD**(arXiv 2601.21288, 真实论文，目前仅预印本未确认接收) — 明确把驾驶拆成"感知-推理-规划"三段，多教师蒸馏，但蒸馏目标是一个普通小模型，不是MoE路由结构，差异点在这。
-- **ExpertAD**(arXiv 2511.11740, 已确认被**AAAI 2026接收**) — 感知端Adapter+规划端Sparse MoE，覆盖感知+规划两段，但不是"蒸馏别的MoE模型"思路，是从头训练。
+- **ExpertAD**(arXiv 2511.11740, 已确认被**AAAI 2026接收**) — **⚠已精读修正(2026-10-22)**：真正的MoE(MoSE，8专家Top-4路由)只存在于Prediction模块，Perception段(PA)是特征重加权非MoE，Planning段完全复用基线——不是"感知+规划两段都MoE"，是单段(预测)MoE；也不是"蒸馏别的MoE模型"思路，专家是从头训练的。详见[notes/expertad.md](expertad.md)。
 
 三篇都还没精读，下一步按PerceptDrive→Drive-KD→ExpertAD顺序读。
 

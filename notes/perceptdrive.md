@@ -131,6 +131,11 @@
 **Scene-conditioned router(场景条件路由器)**
 一个以当前场景特征为输入、输出各专家融合权重的小模块，本质上是把前面SAMoE-VLA笔记里讨论过的"场景级路由"思路，应用在"融合多个不同来源的冻结专家先验"这件事上，而不是"融合FFN参数"——**这是和SAMoE-VLA的关键差异点**：SAMoE-VLA路由的是同一个模型内部训练出来的多个FFN参数，PerceptDrive路由/融合的是多个外部冻结专家模型的输出先验。
 
+**Query Bank(查询库)本质是cross-attention，用来做"压缩"**
+Query Bank要解决的问题是：冻结的Perception Provider吐出的H_t(和Video Encoder的F_t)又长又大，直接塞给后面的Backbone不现实，得压缩成一小撮能用的token。这正好是cross-attention最经典的用法：**Query不是从输入里来的，是一组数量固定、可学习的"提问模板"**(比如专门有一个query负责去H_t里抽几何相关信息，另一个抽语义相关的，第三个抽动态相关的)；Key和Value就是H_t/F_t本身(冻结、不动)。每个query各自跟整个H_t算一遍softmax(QK^T/√d)V，抽出自己负责的那一份，结果就是压缩后的那排token(Geometry/Semantic/Dynamic Prior等)。
+
+跟SAMoE-VLA的CMCA对比一下更好理解两者的区别：Query Bank是**cross-attention**，Q来自可学习模板、K/V来自冻结特征，干的事是"**压缩**"(解决信息太多塞不下的问题)；CMCA是**self-attention+结构化mask**，Q/K/V都来自同一串序列(条件token+动作token)，干的事是"**按规则组织信息怎么互相看**"(解决谁该看见谁的问题)。两者都用同一套Q/K/V+softmax的底层数学工具，但要解决的问题完全不同。
+
 ---
 
 ## 相关工作脉络：Latent World-Action Models
