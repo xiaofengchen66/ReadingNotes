@@ -11,7 +11,7 @@
 | [ARTEMIS](notes/artemis.md) | — | 真正路由(input-dependent) | 自回归轨迹规划 |
 | [WAM-Diff](notes/wam-diff.md) | — | 真正路由(input-dependent) | 单图输入 |
 | [PerceptDrive](notes/perceptdrive.md) | 几何/语义/动态(蒸馏自外部基础模型) | scene级，冻结专家+metric蒸馏监督路由 | 冻结感知先验+轻量路由，跟朱子欣idea机制最接近 |
-| [ExpertAD](notes/expertad.md) | 地图/跟踪/速度/朝向/导航(8个功能专家) | token级，Top-4稀疏选择 | 经典稀疏MoE路线，AAAI 2026已接收 |
+| [ExpertAD](notes/expertad.md) | 环境/自车状态/导航(8个专家，**仅存在于Prediction模块**) | Top-4稀疏选择+噪声门控 | ⚠精读后修正：Perception段(PA)是特征重加权非MoE，Planning段完全复用基线，不是"全程"；AAAI 2026已接收 |
 | [Drive-KD](notes/drive-kd.md) | 感知/推理/规划三元组 | 无路由(纯蒸馏) | "全程"覆盖最广，但完全没有MoE结构 |
 
 ## 分组二：通用MoE技术，按解决的问题分类(CVPR 2026，摘要级)
@@ -102,7 +102,15 @@ CVPR 2026 Driving列表里"driving models/planning"这个核心类目(共45篇�
 
 2. **[DrivePI](notes/drivepi.md)** — **"全程"覆盖做得最完整的单一模型**：统一理解+感知(3D占据)+预测(占据流)+规划(动作)，端到端联合优化，只用0.5B参数的Qwen2.5就超过7B的VLA模型。是跟朱子欣讨论"全程MoE"时最该参考的反例/对照：不用MoE结构、不用蒸馏，靠统一架构+小模型也能做到全程覆盖，这提示"全程覆盖"本身可能不需要MoE/蒸馏才能实现，MoE/蒸馏的价值可能更在别处(比如本repo已经在讨论的计算效率、安全长尾、持续学习)。
 
-3. **[EventDrive](notes/eventdrive.md)** — **驾驶专用的真正MoE**，路由维度是"传感器模态"(事件流 vs 帧)，跟SAMoE-VLA(场景)、ExpertAD(功能子任务)、SemLT3D(类别语义)、MoEActok(技能)一起构成一个较完整的"专家按什么维度划分"案例库。
+3. **[EventDrive](notes/eventdrive.md)** — **驾驶专用的真正MoE**，路由维度是"传感器模态"(事件流 vs 帧)，跟SAMoE-VLA(场景)、ExpertAD(功能子任务，但仅在Prediction一段)、SemLT3D(类别语义)、MoEActok(技能)一起构成一个较完整的"专家按什么维度划分"案例库。
+
+### ⚠ 2026-10-22更正：ExpertAD精读后发现不构成"全程MoE"证据
+
+此前摘要级笔记一度以为ExpertAD可能横跨感知+规划两段(因为abstract写"end-to-end MoE architecture that spans perception and planning")，精读Methodology+Fig.2后发现：**真正的MoE(MoSE，8专家+Top-4路由)只存在于Prediction模块**，Perception段的PA(Perception Adapter)是基于约束优化的软通道重加权，没有专家池/路由选择，不是MoE；Planning段直接复用基线解码器(UniAD/VAD/VADv2)，完全没有改动。
+
+这次更正让"全程(感知+预测+规划三段都做MoE路由)目前没人做过"这个结论**更加确定**——此前以为ExpertAD可能是潜在的两段候选，现在确认它实际只是单段(预测)MoE，连DriveMoE那种两段(感知+规划)都不如。查了96+篇、精读了关键候选(PerceptDrive/SigLino/DEA/ExpertAD)之后，这个空子依然成立，而且比最初判断时更稳固。
+
+**给后续研究的提醒**：引用ExpertAD时不要直接照搬它abstract的"spans perception and planning"说法，这跟实际架构不符。
 
 ### ⚠ 命名混淆警告(整理材料时务必注意)
 
