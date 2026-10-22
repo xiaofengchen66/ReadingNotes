@@ -143,7 +143,8 @@
 
 - [representation-synthesis-2026.md](representation-synthesis-2026.md) — 按 End-to-end AD Survey §4.2(表征设计/表征学习)的框架,把 WA-JEPA / Drive-JEPA / Qwen-Drive-1.0 / DriveZero / SparseDriveV2 分别映射进去,指出 §4.2(表征学习)和 §4.3(世界模型)的边界正在消失,并提出 5 个可推进的具体方向
 - [sensor-fusion-qa.md](sensor-fusion-qa.md) — 由 EMMA(Waymo)附录局限性段落引出的跨论文 Q&A:摄像头/LiDAR/雷达各自优劣、"融合"的真正目的(不是数据标准化)、为什么 VLM 驱动的模型普遍选纯视觉、传统融合 vs 接入大模型的融合成熟度差异、LiDAR 点云数据格式详解
-- [moe-landscape-synthesis-2026-10.md](moe-landscape-synthesis-2026-10.md) — CVPR 2026 MoE全景图谱:驾驶专用MoE(DriveMoE/SAMoE-VLA/PerceptDrive/ExpertAD/Drive-KD等)+23篇通用MoE技术论文,按"路由颗粒度/路由训练信号/省计算量/持续学习防漂移/专家从哪来/路由失效模式"分组,并标出每个已识别的研究空子对应哪些可参考技术
+- [moe-landscape-synthesis-2026-10.md](moe-landscape-synthesis-2026-10.md) — CVPR 2026 MoE全景图谱:驾驶专用MoE(DriveMoE/SAMoE-VLA/PerceptDrive/ExpertAD/Drive-KD等)+23篇通用MoE技术论文,按"路由颗粒度/路由训练信号/省计算量/持续学习防漂移/专家从哪来/路由失效模式"分组,并标出每个已识别的研究空子对应哪些可参考技术;含可视化知识图谱(notes/img/moe-landscape-graph.svg)
+- [moe-fullpipeline-and-distillation-2026-10-22.md](moe-fullpipeline-and-distillation-2026-10-22.md) — 机制全景图(notes/img/mechanism-taxonomy.svg,六条技术轴线)+"全程MoE现状"(没人做到三段独立路由,上限是DriveMoE的两段)+"蒸馏现状"(五种完全不同用法的分类目录,附7个可直接复用的具体蒸馏机制)
 
 ## 结构
 
