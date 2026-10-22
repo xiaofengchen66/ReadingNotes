@@ -59,3 +59,33 @@
 ## 下一步
 
 这23篇目前只是摘要级整理，还没有精读。按你说的"细读时一点一点加进对应单篇笔记"，建议细读顺序：**MoDES、UniMMAD、On Token's Dilemma、Spectral MoE、SegMoTE** 这5篇，因为它们分别直接对应上面表格里已经识别出的4个具体空子/局限，细读收益最高；其余18篇可以之后按需补。
+
+---
+
+## 补充：Distillation批次(30篇，2026-10-21)筛选后的高价值发现
+
+从90篇Distillation列表里按"跟CV/驾驶/VLM相关"筛出30篇处理，以下几篇对研究方向有直接意义：
+
+### 最重要的三个发现
+
+1. **[WPT](notes/wpt-world-policy.md)** — 世界模型指导在线蒸馏出轻量驾驶策略，学生推理快4.9倍、闭环driving score 79.23超过基于世界模型和模仿学习的方法。**这是目前查到的、跟"怎么让驾驶MoE真正省计算量"这个局限最直接的完整解法**，建议优先精读。
+
+2. **[SigLino](notes/siglino.md)** — 多教师蒸馏的目标**明确包括MoE学生**(不只是Dense)，是"蒸馏进MoE"这半个机制的独立验证；但教师依然是通用基础模型(SigLIP2/DINOv3)，不是驾驶专用MoE——跟PerceptDrive共同构成"蒸馏机制已被验证可行，但没人蒸的是别的驾驶MoE系统"这个判断的证据。
+
+3. **[GTR-Turbo](notes/gtr-turbo.md)** — "合并RL训练checkpoint当免费教师"，跟SAMoE-VLA的参数融合是同一类权重空间操作技巧，而且这篇明确算出了具体的训练时间(-50%)和算力成本(-60%)节省数字——是回应"SA-MoE没有真正省计算量"这个局限的又一个具体参照。
+
+### H_BEV滞后问题的第三、第四种解法(补充此前讨论的"定期刷新"/"变化检测触发"两种)
+
+- **[AMap](notes/amap.md)**："从未来蒸馏"——训练时用能看到未来的教师，把前瞻性蒸馏进学生，推理时零额外成本就有"向前看"能力，不需要在线重算。
+- **[Reward Forcing](notes/reward-forcing.md)** 的EMA-Sink机制——不是"只算一次"也不是"定期重算"，而是用指数滑动平均持续、低成本地融合新信息，是第三条路线。
+- **[Prompt-Anchored ReID](notes/prompt-anchored-reid.md)** 的"新增槽位+冻结旧槽位"——是持续学习防遗忘的第三种机制(对照之前的on-tokens-dilemma漂移感知token分配、spectral-moe-continual频谱正交)。
+
+### 其他跟PerceptDrive设计模式直接对照的案例
+
+- **[GKD(语义分割)](notes/gkd-semantic-seg.md)** — "先学领域无关表示、冻结、再任务适配"两阶段范式，跟PerceptDrive的Stage 1/Stage 2结构几乎一样，而且专门讨论了"怎么蒸馏才不破坏泛化能力"。
+- **[Expert-Teacher-Student](notes/expert-teacher-student-dom-adapt.md)** — 三层(专家/教师/学生)协作结构，是PerceptDrive两层(冻结Provider/可训Backbone)结构的一个扩展版本，多了一层域适配。
+- **[4D-RGPT](notes/4d-rgpt.md)** — 冻结专家蒸馏进MLLM，同一设计模式在4D理解任务上的例证。
+
+### 驾驶专用，补充进分组二
+
+- **[AMap](notes/amap.md)**、**[Deformable Gaussian Occupancy](notes/deformable-gaussian-occupancy.md)**、**[SemLT3D](notes/semlt3d.md)**、**[WPT](notes/wpt-world-policy.md)** 四篇明确是驾驶场景(HD地图/占据栅格/长尾3D检测/世界模型策略蒸馏)，但都不是MoE(除了SemLT3D有语言引导的MoE路由组件)，是"蒸馏"这条技术路线在驾驶具体子任务上的独立应用，可以跟分组一的MoE驾驶论文对照，看蒸馏和MoE这两条技术路线在驾驶场景里各自的优势区间。
